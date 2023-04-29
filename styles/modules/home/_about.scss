@@ -1,0 +1,60 @@
+.about-intro {
+  width: 100%;
+  min-height: 70vh;
+  background-color: var(--secondary-color);
+  @include flexType(row, center, center);
+  padding: 5vh 10vw;
+  gap: 5vw;
+  .stuff-container {
+    width: 30%;
+    h2 {
+      font-size: 2.3rem;
+      letter-spacing: 0.2rem;
+    }
+    p {
+      margin: 8% 0;
+      line-height: 1.5rem;
+      word-wrap: break-word;
+      letter-spacing: 0.1rem;
+      font-size: 0.9rem;
+    }
+    a {
+      color: black;
+      font-size: 1.1rem;
+    }
+  }
+  .img-container {
+    width: 25%;
+    background-color: pink;
+    border-radius: 50% 50% 58% 42% / 56% 53% 47% 50%;
+    aspect-ratio: 0.9;
+  }
+
+  @media only screen and (max-width: 900px) {
+    padding: 3vh 2vw;
+    gap: 5vw;
+    @include flexType(column-reverse, center, center);
+    .stuff-container {
+      width: 90%;
+      text-align: center;
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 900;
+        letter-spacing: 0.1rem;
+      }
+      p {
+        margin: 6% 0;
+        font-size: 0.85rem;
+        line-height: 1rem;
+        letter-spacing: 0.02rem;
+      }
+      a {
+        font-size: 1rem;
+      }
+    }
+    .img-container {
+      width: 45%;
+      margin-bottom: 5%;
+    }
+  }
+}

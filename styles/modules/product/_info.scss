@@ -1,0 +1,162 @@
+.info {
+  height: 80%;
+  width: 90%;
+  @include flexType(row, center, center);
+  margin: auto;
+  .images {
+    width: 50%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5vh 3vw;
+    & > div {
+      border: 1px solid black;
+      aspect-ratio: 1;
+    }
+    & > div:nth-of-type(1) {
+      width: 80%;
+      justify-self: flex-end;
+      align-self: flex-end;
+      box-shadow: 15px 15px 0px -5px #80ffd1;
+    }
+
+    & > div:nth-of-type(2),
+    :nth-of-type(3) {
+      width: 50%;
+      box-shadow: 10px 10px 0px -3px #80aeff;
+    }
+    & > div:nth-of-type(2) {
+      align-self: flex-end;
+    }
+    & > div:nth-of-type(3) {
+      justify-self: flex-end;
+    }
+    & > div:nth-of-type(4) {
+      width: 75%;
+      aspect-ratio: 1.25;
+      box-shadow: 15px 15px 0px -5px #80ffd1;
+    }
+  }
+  .stuff-container {
+    width: 50%;
+    height: 80%;
+    @include flexType(column, center, flex-start);
+    h2 {
+      font-size: 2.3rem;
+      height: 10%;
+      font-family: var(--primary-font);
+      letter-spacing: 0.08rem;
+      word-spacing: 0.2rem;
+      font-weight: 900;
+    }
+    span {
+      font-size: 2rem;
+      height: 8%;
+      font-weight: 500;
+      letter-spacing: 0.05rem;
+      &:nth-of-type(2),
+      del {
+        font-weight: 900;
+        margin-right: 5px;
+      }
+    }
+    p {
+      font-size: 1.2rem;
+      font-weight: 300;
+      letter-spacing: 0.05rem;
+      word-spacing: 0.01rem;
+      margin: 2% 0 5% 0;
+      line-height: 1.5rem;
+    }
+    button {
+      font-size: 1.8rem;
+      background-color: black;
+      color: white;
+      padding: 1.5% 2%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid black;
+      &:hover {
+        background-color: var(--primary-color);
+        border: 1px solid black;
+        transform: translate(-5%, -5%);
+        box-shadow: 5px 5px 0px 2.5px black;
+      }
+    }
+    .adder {
+      @include flexType(row, space-between, center);
+      background-color: var(--primary-fade-color);
+      width: 150px;
+      height: 35px;
+      text-align: center;
+      > button {
+        width: 40px;
+        height: 100%;
+        font-size: 3rem;
+        @include flexType(row, center, center);
+      }
+      > span {
+        height: 100%;
+        @include flexType(row, center, center);
+        font-size: 1.5rem;
+      }
+    }
+  }
+  @media only screen and (max-width: 900px) {
+    @include flexType(column, center, center);
+    height: 100%;
+    padding: 10vh 3vw;
+    gap: 3vh;
+    .images {
+      height: 50%;
+      width: 100%;
+      gap: 5vh 5vw;
+    }
+    .stuff-container {
+      @include flexType(column, space-between, center);
+      text-align: center;
+      width: 95%;
+      height: 50%;
+      h2 {
+        font-size: 1.5rem;
+        letter-spacing: 0.05rem;
+        height: 10%;
+      }
+      span {
+        font-size: 1.25rem;
+        height: 10%;
+        letter-spacing: 0.1rem;
+        &:nth-of-type(1) {
+          margin: 1vh;
+        }
+      }
+      p {
+        font-size: 0.6rem;
+        line-height: 1rem;
+        width: 90%;
+      }
+      button {
+        font-size: 1rem;
+
+        &:hover {
+          background-color: black;
+          border: none;
+          transform: none;
+          box-shadow: none;
+        }
+      }
+      .adder {
+        height: 20px;
+        width: 70px;
+        button {
+          font-size: 1rem;
+          height: 100%;
+          width: 30px;
+        }
+        span {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}

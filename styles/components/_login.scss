@@ -1,0 +1,122 @@
+.register {
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 2;
+  border-radius: 15px;
+  @include flexType(column, center, center);
+  a {
+    color: white;
+    font-size: 1.75rem;
+    width: 30%;
+    text-align: right;
+  }
+  .options {
+    width: 30%;
+    height: 7.5%;
+    @include flexType(row, center, center);
+    button {
+      width: 50%;
+      height: 100%;
+      font-size: 1.25rem;
+      font-weight: 500;
+      border: none;
+      font-family: var(--header-font);
+      background-color: var(--primary-fade-color);
+    }
+    button:hover,
+    button:focus {
+      background-color: var(--primary-color);
+      font-weight: 700;
+    }
+  }
+
+  form {
+    height: 50%;
+    width: 30%;
+    background-color: var(--primary-color);
+    @include flexType(column, center, center);
+    label {
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+    input {
+      margin-bottom: 5%;
+      width: 80%;
+      padding: 0.5rem;
+      border: none;
+      outline: none;
+      border-radius: 5px;
+      background-color: rgba(0, 0, 0, 0.2);
+      &::placeholder {
+        color: rgba(249, 238, 238, 0.633);
+      }
+    }
+    span {
+      font-size: 0.85rem;
+      padding-bottom: 5%;
+    }
+    button:nth-of-type(1) {
+      font-size: 1.5rem;
+      margin: 5%;
+      background-color: var(--primary-fade-color);
+      width: 150px;
+      height: 40px;
+      border-radius: 5px;
+    }
+    button:nth-of-type(2) {
+      font-size: 1.2rem;
+      border-radius: 5px;
+      width: 250px;
+      height: 40px;
+      padding: 1%;
+      text-transform: capitalize;
+      background-color: var(--primary-fade-color);
+      @include flexType(row, space-around, center);
+    }
+
+    &.login {
+      .op {
+        width: 80%;
+        @include flexType(row, space-around, center);
+        .fp {
+          text-align: right;
+          width: 60%;
+          text-decoration: none;
+          font-size: 0.75rem;
+          color: black;
+        }
+        input[type="checkbox"] + label {
+          font-size: 0.75rem;
+          width: 30%;
+        }
+        input[type="checkbox"] {
+          cursor: pointer;
+          margin: auto;
+          height: 17.5px;
+
+          width: 17.5px;
+        }
+      }
+      label {
+        &.mail,
+        &.password {
+          width: 80%;
+          margin-bottom: 1%;
+        }
+      }
+    }
+    &.sign-up {
+      padding: 7.5% 0;
+      label {
+        width: 80%;
+        margin-bottom: 0.5%;
+      }
+      input {
+        margin-bottom: 2.5%;
+      }
+    }
+  }
+}

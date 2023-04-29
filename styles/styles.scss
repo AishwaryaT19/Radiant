@@ -1,0 +1,13 @@
+@import "./variables";
+@import "./globals";
+@import "./mixins";
+
+@import "./pages/home";
+
+@import "./pages/categories.scss";
+
+@import "./pages/product";
+@import "./pages/cart";
+
+@import "./components/header";
+@import "./components/login";
