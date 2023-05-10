@@ -27,14 +27,15 @@ export default function Login() {
   const onLoginSuccess = (credentialResponse: any) => {
     let data = (jwt_decode(credentialResponse?.credential ?? "") ??
       {}) as Record<string, any>;
-    async function checkUserExistence() {
-      const categories: any =
-        (await gqlclient.request(checkForEmail, {
-          email: data.email,
-        })) ?? {};
-      console.log(categories);
-    }
-    checkUserExistence();
+    fetch(
+      process.env.NEXT_PUBLIC_WEB_ENDPOINT +
+        "/api/check-email/" +
+        Buffer.from(data.email).toString("base64")
+    ).then((tempData) => {
+      tempData.json().then((finalData) => {
+        console.log(finalData);
+      });
+    });
   };
   return (
     <div className="register">

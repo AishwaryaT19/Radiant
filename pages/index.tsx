@@ -21,7 +21,7 @@ export default function Home({ category }: HomeProps) {
       <About />
       <Testimonials />
       <Contact />
-      {/* <Login /> */}
+      <Login />
     </section>
   );
 }
