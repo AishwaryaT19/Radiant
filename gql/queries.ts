@@ -22,8 +22,7 @@ export const getProductByCategories = gql`
         bannnerImage {
           url
         }
-        sale
-        salePrice
+        salePercent
         price
         category {
           title
@@ -49,13 +48,23 @@ export const getSingleProduct = gql`
           json
         }
         price
-        sale
-        salePrice
+        salePercent
         imagesCollection(limit: 4) {
           items {
             url
           }
         }
+      }
+    }
+  }
+`;
+
+export const checkForEmail = gql`
+  query ($email: String!) {
+    userCollection(where: { email: $email }) {
+      items {
+        name
+        image
       }
     }
   }

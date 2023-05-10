@@ -12,8 +12,7 @@ export interface ProductProp {
     json: Document;
   };
   price: number;
-  sale: boolean;
-  salePrice: number;
+  salePercent: number | null;
   imagesCollection: {
     items: {
       url: string;

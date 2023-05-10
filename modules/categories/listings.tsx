@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React from "react";
 import type { ProductProps } from "../categories/types";
-import { BsFillCartPlusFill as ButtonLogo } from "react-icons/bs";
 import Link from "next/link";
 
 const mapper = (elem: any, index: number) => {
@@ -11,8 +10,7 @@ const mapper = (elem: any, index: number) => {
       name={elem?.name ?? "none"}
       imgUrl={elem?.bannnerImage?.url ?? "/logo.png"}
       price={elem.price}
-      saleprice={elem.salePrice}
-      sale={elem.sale}
+      salePercent={elem.salePercent}
       category={elem.category.title}
     />
   );
@@ -23,10 +21,10 @@ export default function Listings({ products }: ProductProps) {
 }
 
 function ProductCard(props: any) {
-  const { name, imgUrl, price, saleprice, sale, category } = props;
-  let saleper = 0;
-  if (sale == true) {
-    saleper = Math.ceil((((price - saleprice) / price) * 100) / 10) * 10;
+  const { name, imgUrl, price, salePercent, category } = props;
+  let finalPrice = price;
+  if (salePercent !== null) {
+    finalPrice = price - (salePercent / 100) * price;
   }
   return (
     <Link
@@ -40,19 +38,16 @@ function ProductCard(props: any) {
       </div>
       <div className="stuff-container">
         <h3>{name}</h3>
-        {sale == true ? (
+        {salePercent !== null ? (
           <span>
             ₹<del>{price}</del>
-            {saleprice}
+            {finalPrice}
           </span>
         ) : (
-          <span>₹{price}</span>
+          <span>₹{finalPrice}</span>
         )}
       </div>
-      {sale == true && <span className="sale">{saleper}% OFF</span>}
-      <button type="button" title="Add to Cart">
-        <ButtonLogo />
-      </button>
+      {salePercent !== null && <span className="sale">{salePercent}% OFF</span>}
     </Link>
   );
 }

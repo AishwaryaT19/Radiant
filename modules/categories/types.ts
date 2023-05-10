@@ -9,8 +9,7 @@ export interface ProductType {
   bannerImage: {
     url: string;
   };
-  sale: boolean;
-  salePrice: number;
+  salePercent: number;
   price: number;
   category: {
     title: string;

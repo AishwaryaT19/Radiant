@@ -23,7 +23,7 @@
       width: 100%;
     }
     .stuff-container {
-      height: 20%;
+      height: 30%;
       width: 100%;
       @include flexType(column, center, center);
       text-align: center;
@@ -35,7 +35,7 @@
         letter-spacing: 0.05rem;
       }
       & > span {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         font-weight: 500;
         letter-spacing: 0.05rem;
         del {
@@ -58,15 +58,6 @@
       font-size: 1.2rem;
       font-weight: 600;
       color: white;
-    }
-    button {
-      height: 10%;
-      font-size: 1.3rem;
-      width: 100%;
-      background-color: black;
-      color: white;
-      border: none;
-      cursor: pointer;
     }
   }
   @media only screen and (max-width: 900px) {

@@ -1,10 +1,10 @@
 import React, { ReactNode, useState, Dispatch, SetStateAction } from "react";
 import { createContext } from "react";
-interface CartType {
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
+export interface CartType {
   name: string;
   price: number;
-  sale: boolean;
-  saleprice: number;
   url: string;
   numberOfItems: number;
 }
@@ -21,12 +21,17 @@ export const AppContext = createContext<
 interface ProviderProps {
   children: ReactNode;
 }
+
 export default function AC(props: ProviderProps) {
   const [contextState, setcontextState] =
     useState<AppContextType>(appContextInit);
   return (
-    <AppContext.Provider value={[contextState, setcontextState]}>
-      {props.children}
-    </AppContext.Provider>
+    <GoogleOAuthProvider
+      clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}
+    >
+      <AppContext.Provider value={[contextState, setcontextState]}>
+        {props.children}
+      </AppContext.Provider>
+    </GoogleOAuthProvider>
   );
 }

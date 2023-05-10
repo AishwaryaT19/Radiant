@@ -11,8 +11,7 @@ export default function Info(product: ProductProp) {
     name,
     productDescription,
     price,
-    sale,
-    salePrice,
+    salePercent,
     imagesCollection,
   } = product;
   const id = sys.id;
@@ -26,17 +25,15 @@ export default function Info(product: ProductProp) {
       ...cart,
       [`${id}`]: {
         name: name,
-        price: price,
-        sale: sale,
-        saleprice: salePrice,
+        price: finalPrice,
         url: imagesCollection?.items[0]?.url ?? "/logo.png",
         numberOfItems: amount,
       },
     });
   }, [amount]);
-  let saleper = 0;
-  if (sale == true) {
-    saleper = Math.ceil((((price - salePrice) / price) * 100) / 10) * 10;
+  let finalPrice = price;
+  if (salePercent !== null) {
+    finalPrice = price - (salePercent / 100) * price;
   }
   let imagesCollectionitems = imagesCollection.items;
   if (imagesCollectionitems.length < 4) {
@@ -53,15 +50,17 @@ export default function Info(product: ProductProp) {
       </div>
       <div className="stuff-container">
         <h2>{name}</h2>
-        {sale == true ? (
+        {salePercent !== null ? (
           <span>
             ₹<del>{price}</del>
-            {salePrice}
+            {finalPrice}
           </span>
         ) : (
-          <span>₹{price}</span>
+          <span>₹{finalPrice}</span>
         )}
-        {sale == true && <span className="sale">{saleper}% OFF</span>}
+        {salePercent !== null && (
+          <span className="sale">{salePercent}% OFF</span>
+        )}
         {documentToReactComponents(productDescription.json)}
         {amount == 0 ? (
           <button onClick={cartSetting}>Add to Cart</button>

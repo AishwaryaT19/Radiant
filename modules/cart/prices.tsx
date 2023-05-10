@@ -2,19 +2,20 @@ import Link from "next/link";
 import React from "react";
 
 const data: any = [
+  // {
+  //   name: "subtotal",
+  //   price: 400,
+  // },
+  // {
+  //   name: "discount",
+  //   price: 400,
+  // },
   {
-    name: "abe",
-    price: 400,
-  },
-  {
-    name: "abe",
-    price: 400,
-  },
-  {
-    name: "abe",
+    name: "total ...",
     price: 400,
   },
 ];
+
 const mapper = (elem: any, index: number) => {
   return <Listings key={index} name={elem.name} price={elem.price} />;
 };
@@ -30,14 +31,14 @@ export default function Prices() {
         </button>
       </div>
       {data.map(mapper)}
-      <Link href="/">Continue to Checkout</Link>
+      <Link href="/cart/checkout">Continue to Checkout</Link>
     </div>
   );
 }
 function Listings(props: any) {
   const { name, price } = props;
   return (
-    <div className="prices">
+    <div className="price">
       <span>{name}</span>
       <span>{price}</span>
     </div>

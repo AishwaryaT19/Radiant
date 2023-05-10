@@ -8,6 +8,7 @@ import gqlclient from "@/gql/client";
 import { getCategories } from "@/gql/queries";
 import type { GetServerSideProps } from "next";
 import type { CategoryPropType } from "@/modules/home/types";
+import Login from "@/components/login";
 
 export interface HomeProps {
   category: CategoryPropType;
@@ -20,6 +21,7 @@ export default function Home({ category }: HomeProps) {
       <About />
       <Testimonials />
       <Contact />
+      {/* <Login /> */}
     </section>
   );
 }
