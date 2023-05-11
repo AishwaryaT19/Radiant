@@ -25,7 +25,7 @@ function CategoryCard(props: CategoryType) {
   const { title, imgUrl } = props;
   return (
     <Link
-      href={"/" + title.replaceAll(" ", "-")}
+      href={"/" + title.replaceAll(" ", "-").toLowerCase()}
       className="img-container category-card"
     >
       <Image src={imgUrl} fill sizes="100%" alt={title} />

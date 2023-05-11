@@ -1,12 +1,10 @@
 import React from "react";
 import Link from "next/link";
 // import { FcGoogle } from "react-icons/fc";
-import { useState } from "react";
-import { GiCancel } from "react-icons/gi";
+// import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
-import gqlclient from "@/gql/client";
-import { checkForEmail } from "@/gql/queries";
+import { GiCancel } from "react-icons/gi";
 
 export default function Login() {
   // const [isLoginSel, setIsLoginSel] = useState<boolean>(true);
@@ -16,14 +14,13 @@ export default function Login() {
   // const condRendSign = () => {
   //   setIsLoginSel(false);
   // };
-  interface User {
-    name: string;
-    image: string;
-    password: string;
-    email: string;
-  }
-
-  const [user, setUser] = useState({});
+  // interface User {
+  //   name: string;
+  //   image: string;
+  //   password: string;
+  //   email: string;
+  // }
+  // const [user, setUser] = useState({});
   const onLoginSuccess = (credentialResponse: any) => {
     let data = (jwt_decode(credentialResponse?.credential ?? "") ??
       {}) as Record<string, any>;
@@ -33,7 +30,7 @@ export default function Login() {
         Buffer.from(data.email).toString("base64")
     ).then((tempData) => {
       tempData.json().then((finalData) => {
-        console.log(finalData);
+        // console.log(finalData);
       });
     });
   };
@@ -87,7 +84,7 @@ export default function Login() {
           logo_alignment="center"
           onSuccess={onLoginSuccess}
           onError={() => {
-            console.log("Login Failed");
+            // console.log("Login Failed");
           }}
         />
       </form>

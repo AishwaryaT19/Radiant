@@ -29,7 +29,10 @@ function ProductCard(props: any) {
   return (
     <Link
       href={
-        "/" + category.replaceAll(" ", "-") + "/" + name.replaceAll(" ", "-")
+        "/" +
+        category.replaceAll(" ", "-").toLowerCase() +
+        "/" +
+        name.replaceAll(" ", "-").toLowerCase()
       }
       className="item-card"
     >

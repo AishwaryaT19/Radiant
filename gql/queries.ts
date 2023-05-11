@@ -69,3 +69,26 @@ export const checkForEmail = gql`
     }
   }
 `;
+
+export const getCategoryNames = gql`
+  query {
+    categoriesCollection {
+      items {
+        title
+      }
+    }
+  }
+`;
+
+export const getProductNamesAndCategories = gql`
+  query {
+    productsCollection {
+      items {
+        name
+        category {
+          title
+        }
+      }
+    }
+  }
+`;

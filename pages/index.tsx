@@ -6,7 +6,7 @@ import Testimonials from "@/modules/home/testimonials";
 import Contact from "@/modules/home/contact";
 import gqlclient from "@/gql/client";
 import { getCategories } from "@/gql/queries";
-import type { GetServerSideProps } from "next";
+import type { GetStaticProps } from "next";
 import type { CategoryPropType } from "@/modules/home/types";
 import Login from "@/components/login";
 
@@ -26,11 +26,12 @@ export default function Home({ category }: HomeProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const categories: any = (await gqlclient.request(getCategories)) ?? {};
   const category = categories?.categoriesCollection?.items ?? [];
   const forReturn: HomeProps = { category: category };
   return {
     props: forReturn,
+    revalidate: 172800,
   };
 };
