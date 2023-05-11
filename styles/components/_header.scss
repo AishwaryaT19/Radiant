@@ -64,6 +64,15 @@
       @include flexType(row, center, center);
       font-size: 1.7rem;
     }
+    button {
+      cursor: pointer;
+      color: white;
+      background-color: rgba(0, 0, 0, 0);
+      border: none;
+      height: 100%;
+      font-size: 1.7rem;
+      @include flexType(row, center, center);
+    }
     .cart {
       position: relative;
       span {

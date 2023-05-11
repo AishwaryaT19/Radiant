@@ -21,15 +21,23 @@ export default function Info(product: ProductProp) {
     setAmount(1);
   };
   useEffect(() => {
-    setCart({
-      ...cart,
-      [`${id}`]: {
-        name: name,
-        price: finalPrice,
-        url: imagesCollection?.items[0]?.url ?? "/logo.png",
-        numberOfItems: amount,
-      },
-    });
+    if (amount > 0) {
+      setCart({
+        ...cart,
+        [`${id}`]: {
+          name: name,
+          price: finalPrice,
+          url: imagesCollection?.items[0]?.url ?? "/logo.png",
+          numberOfItems: amount,
+        },
+      });
+    } else {
+      if (cart[`${id}`]) {
+        const tempCart = cart;
+        delete tempCart[`${id}`];
+        setCart(tempCart);
+      }
+    }
   }, [amount]);
   let finalPrice = price;
   if (salePercent !== null) {
@@ -41,6 +49,7 @@ export default function Info(product: ProductProp) {
       imagesCollectionitems.push(imagesCollectionitems[i] as any);
     }
   }
+
   return (
     <div className="info">
       <div className="images">
