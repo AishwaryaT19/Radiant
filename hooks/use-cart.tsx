@@ -2,15 +2,13 @@ import { useContext } from "react";
 import { AppContext, type AppContextType } from "../provider/app-context";
 
 export function useGetCart() {
-  return useContext(AppContext)[0].cart;
+  return useContext(AppContext).cart.state;
 }
 
 export function useSetCart() {
-  const setAllContext = useContext(AppContext)[1];
-  const setterFunction = (prop: AppContextType["cart"]) => {
-    setAllContext((previousContext) => {
-      return { ...previousContext, cart: prop };
-    });
+  const setCartFun = useContext(AppContext).cart.setState;
+  const setterFunction = (prop: AppContextType["cart"]["state"]) => {
+    setCartFun(prop);
   };
   return setterFunction;
 }
@@ -18,9 +16,6 @@ export function useSetCart() {
 export function useCart() {
   const cart = useGetCart();
   const setCart = useSetCart();
-  const forReturn: [
-    AppContextType["cart"],
-    (prop: AppContextType["cart"]) => void
-  ] = [cart, setCart];
+  const forReturn: [AppContextType["cart"]["state"], (prop: AppContextType["cart"]["state"]) => void] = [cart, setCart];
   return forReturn;
 }

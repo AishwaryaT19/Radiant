@@ -1,18 +1,10 @@
 import React, { type RefObject, type Ref, forwardRef } from "react";
 import Link from "next/link";
-// import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
 import { GiCancel } from "react-icons/gi";
 
 const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
-  // interface User {
-  //   name: string;
-  //   image: string;
-  //   password: string;
-  //   email: string;
-  // }
-  // const [user, setUser] = useState({});
   const onLoginSuccess = (credentialResponse: any) => {
     const data = (jwtDecode(credentialResponse?.credential ?? "") ?? {}) as Record<string, any>;
     fetch(process.env.NEXT_PUBLIC_WEB_ENDPOINT + "/api/check-email/" + Buffer.from(data.email).toString("base64")).then(
@@ -23,6 +15,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
         });
       }
     );
+    ref?.current?.close();
   };
   const ref = passedRef as RefObject<HTMLDialogElement>;
   const closeHandler = () => {
