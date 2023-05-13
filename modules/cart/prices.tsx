@@ -1,5 +1,5 @@
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
 
 const data: any = [
   // {
@@ -12,8 +12,8 @@ const data: any = [
   // },
   {
     name: "total ...",
-    price: 400,
-  },
+    price: 400
+  }
 ];
 
 const mapper = (elem: any, index: number) => {

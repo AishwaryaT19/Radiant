@@ -12,6 +12,20 @@ export const getCategories = gql`
   }
 `;
 
+export const getTestimonials = gql`
+  query {
+    testimonialsCollection {
+      items {
+        user
+        feedback
+        profilePicture {
+          url
+        }
+      }
+    }
+  }
+`;
+
 export const getProductByCategories = gql`
   query ($collectionType: String!) {
     productsCollection(

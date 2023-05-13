@@ -1,14 +1,14 @@
-import Image from "next/image";
 import React, { type FormEventHandler } from "react";
+import Image from "next/image";
+import axios from "axios";
 import {
   contactUsHeading,
   contactUsMail,
   contactUsName,
   contactUsNumber,
   contactUsSubmitButton,
-  contactUsText,
+  contactUsText
 } from "./text";
-import axios from "axios";
 
 export default function Contact() {
   const onSub: FormEventHandler<HTMLFormElement> = (event) => {
@@ -19,17 +19,12 @@ export default function Contact() {
     const mail = targets[2]?.value ?? "";
     const text = targets[3]?.value ?? "";
     const dataToSend: string[] = [name, number, mail, text];
-    const entries = [
-      "entry.1962934510",
-      "entry.823058088",
-      "entry.1829671278",
-      "entry.1643474162",
-    ];
+    const entries = ["entry.1962934510", "entry.823058088", "entry.1829671278", "entry.1643474162"];
     const formID = "1Z0fN_sJF8UMwqqJDEpY4cLvBznzdEiks9L4dWqZPXnw";
-    var urlAttr = "";
+    let urlAttr = "";
     for (let i = 0; i < dataToSend.length; i++) {
       //   :/?#[]@!$&'()*+,;=%
-      var temp = (dataToSend[i] ?? "")
+      const temp = (dataToSend[i] ?? "")
         .replace("%", "%25")
         .replace(" ", "%20")
         .replace(":", "%3A")
@@ -50,7 +45,7 @@ export default function Contact() {
         .replace(",", "%2C")
         .replace(";", "%3B")
         .replace("=", "%3D");
-      var temp2 = entries[i] + "=" + temp;
+      const temp2 = entries[i] + "=" + temp;
       if (!(temp2 === " " || temp2 === "")) {
         urlAttr += temp2;
       }
@@ -60,52 +55,32 @@ export default function Contact() {
       }
     }
 
-    var url =
-      "https://docs.google.com/forms/d/" + formID + "/formResponse?" + urlAttr;
+    const url = "https://docs.google.com/forms/d/" + formID + "/formResponse?" + urlAttr;
 
     try {
-      axios.post(url, null).catch(() => {});
-    } catch {}
+      axios.post(url, null);
+    } catch {
+      /* empty */
+    }
   };
   return (
     <div className="contact">
       <div className="img-container">
-        <Image
-          src="/assets/images/cherryblossom.png"
-          fill
-          sizes="100%"
-          alt=""
-        />
+        <Image src="/assets/images/cherryblossom.png" fill sizes="100%" alt="" />
       </div>
       <h2>{contactUsHeading}</h2>
       <form className="contact-form" onSubmit={onSub}>
         <div className="main-name">
           <label htmlFor="name">{contactUsName}</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Enter Your Name"
-          />
+          <input type="text" id="name" name="name" placeholder="Enter Your Name" />
         </div>
         <div className="number-main">
           <label htmlFor="number">{contactUsNumber}</label>
-          <input
-            type="text"
-            pattern="[1-9]{1}[0-9]{9}"
-            id="number"
-            name="number"
-            placeholder="Phone Number"
-          />
+          <input type="text" pattern="[1-9]{1}[0-9]{9}" id="number" name="number" placeholder="Phone Number" />
         </div>
         <div className="mail-main">
           <label htmlFor="mail">{contactUsMail}</label>
-          <input
-            type="email"
-            id="mail"
-            name="mail"
-            placeholder="Your Mail-Id"
-          />
+          <input type="email" id="mail" name="mail" placeholder="Your Mail-Id" />
         </div>
         <div className="text-main">
           <label htmlFor="text">{contactUsText}</label>

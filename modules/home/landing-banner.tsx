@@ -1,7 +1,7 @@
-import Link from "next/link";
 import React from "react";
-import { buttonText, mainHeading, subHeading } from "./text";
 import Image from "next/image";
+import Link from "next/link";
+import { buttonText, mainHeading, subHeading } from "./text";
 
 export default function LandingBanner() {
   return (

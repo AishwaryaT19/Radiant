@@ -1,7 +1,7 @@
-import Image from "next/image";
 import React from "react";
-import type { ProductProps } from "../categories/types";
+import Image from "next/image";
 import Link from "next/link";
+import type { ProductProps } from "../categories/types";
 
 const mapper = (elem: any, index: number) => {
   return (
@@ -28,12 +28,7 @@ function ProductCard(props: any) {
   }
   return (
     <Link
-      href={
-        "/" +
-        category.replaceAll(" ", "-").toLowerCase() +
-        "/" +
-        name.replaceAll(" ", "-").toLowerCase()
-      }
+      href={"/" + category.replaceAll(" ", "-").toLowerCase() + "/" + name.replaceAll(" ", "-").toLowerCase()}
       className="item-card"
     >
       <div className="img-container">

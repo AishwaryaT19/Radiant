@@ -1,19 +1,11 @@
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import React from "react";
-import type { ProductImage, ProductProp } from "./types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { useCart } from "@/hooks/use-cart";
-import { useState, useEffect } from "react";
+import type { ProductImage, ProductProp } from "./types";
 
 export default function Info(product: ProductProp) {
-  const {
-    sys,
-    name,
-    productDescription,
-    price,
-    salePercent,
-    imagesCollection,
-  } = product;
+  const { sys, name, productDescription, price, salePercent, imagesCollection } = product;
   const id = sys.id;
   const [cart, setCart] = useCart();
   const [amount, setAmount] = useState<number>(0);
@@ -28,8 +20,8 @@ export default function Info(product: ProductProp) {
           name: name,
           price: finalPrice,
           url: imagesCollection?.items[0]?.url ?? "/logo.png",
-          numberOfItems: amount,
-        },
+          numberOfItems: amount
+        }
       });
     } else {
       if (cart[`${id}`]) {
@@ -43,7 +35,7 @@ export default function Info(product: ProductProp) {
   if (salePercent !== null) {
     finalPrice = price - (salePercent / 100) * price;
   }
-  let imagesCollectionitems = imagesCollection.items;
+  const imagesCollectionitems = imagesCollection.items;
   if (imagesCollectionitems.length < 4) {
     for (let i = 0; i < 4 - imagesCollectionitems.length; i++) {
       imagesCollectionitems.push(imagesCollectionitems[i] as any);
@@ -67,9 +59,7 @@ export default function Info(product: ProductProp) {
         ) : (
           <span>₹{finalPrice}</span>
         )}
-        {salePercent !== null && (
-          <span className="sale">{salePercent}% OFF</span>
-        )}
+        {salePercent !== null && <span className="sale">{salePercent}% OFF</span>}
         {documentToReactComponents(productDescription.json)}
         {amount == 0 ? (
           <button onClick={cartSetting}>Add to Cart</button>

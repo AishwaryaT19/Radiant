@@ -1,9 +1,9 @@
-import Info from "../../modules/products/info";
 import React from "react";
-import gqlclient from "@/gql/client";
 import type { GetStaticPaths, GetStaticProps } from "next";
+import gqlclient from "@/gql/client";
 import { getProductNamesAndCategories, getSingleProduct } from "@/gql/queries";
 import type { ProductProp } from "@/modules/products/types";
+import Info from "../../modules/products/info";
 
 export default function Product({ data }: { data: ProductProp }) {
   return (
@@ -33,13 +33,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
     return {
       params: {
         product: elem?.name?.replaceAll(" ", "-").toLowerCase(),
-        category: elem?.category?.title.replaceAll(" ", "-").toLowerCase(),
-      },
+        category: elem?.category?.title.replaceAll(" ", "-").toLowerCase()
+      }
     };
   });
   return {
     paths: ProductNamesArr,
-    fallback: false,
+    fallback: false
   };
 };
 
@@ -48,13 +48,13 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const pro = params?.product;
   const products: any =
     (await gqlclient.request(getSingleProduct, {
-      productName: String(pro).replaceAll("-", " "),
+      productName: String(pro).replaceAll("-", " ")
     })) ?? {};
   const product: ProductProp = products?.productsCollection?.items[0] ?? {};
   return {
     props: {
-      data: product,
+      data: product
     },
-    revalidate: 43200,
+    revalidate: 43200
   };
 };

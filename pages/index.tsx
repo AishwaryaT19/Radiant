@@ -1,13 +1,13 @@
 import React from "react";
-import LandingBanner from "@modules/home/landing-banner";
-import Categories from "@modules/home/categories";
-import About from "@modules/home/about";
-import Testimonials from "@/modules/home/testimonials";
-import Contact from "@/modules/home/contact";
+import type { GetStaticProps } from "next";
 import gqlclient from "@/gql/client";
 import { getCategories } from "@/gql/queries";
-import type { GetStaticProps } from "next";
+import Contact from "@/modules/home/contact";
+import Testimonials from "@/modules/home/testimonials";
 import type { CategoryPropType } from "@/modules/home/types";
+import About from "@modules/home/about";
+import Categories from "@modules/home/categories";
+import LandingBanner from "@modules/home/landing-banner";
 
 export interface HomeProps {
   category: CategoryPropType;
@@ -30,6 +30,6 @@ export const getStaticProps: GetStaticProps = async () => {
   const forReturn: HomeProps = { category: category };
   return {
     props: forReturn,
-    revalidate: 172800,
+    revalidate: 172800
   };
 };

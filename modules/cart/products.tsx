@@ -1,12 +1,12 @@
-import { useCart } from "@/hooks/use-cart";
 import Image from "next/image";
 import { RiDeleteBin2Fill } from "react-icons/ri";
+import { useCart } from "@/hooks/use-cart";
 import type { CartType } from "@/provider/app-context";
 
 export default function Products() {
   const [cart, setCart] = useCart();
   const cartClear = () => {
-    let x = window.confirm("Are You Sure?");
+    const x = window.confirm("Are You Sure?");
     if (x) {
       setCart({});
     }
@@ -53,7 +53,7 @@ function ItemCard({
   name,
   noi,
   price,
-  id,
+  id
 }: {
   img: {
     src: string;
@@ -85,7 +85,7 @@ function ItemCard({
             }
             tempCart[`${id}`] = {
               ...tempCurrentItem,
-              numberOfItems: noi - 1,
+              numberOfItems: noi - 1
             };
             setCart(tempCart);
           }}
@@ -101,7 +101,7 @@ function ItemCard({
             if (tempCurrentItem === undefined) return;
             tempCart[`${id}`] = {
               ...tempCurrentItem,
-              numberOfItems: noi + 1,
+              numberOfItems: noi + 1
             };
             setCart(tempCart);
           }}

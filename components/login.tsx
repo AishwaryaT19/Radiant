@@ -1,9 +1,8 @@
 import React, { type RefObject, type Ref, forwardRef } from "react";
 import Link from "next/link";
-// import { FcGoogle } from "react-icons/fc";
 // import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import jwt_decode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import { GiCancel } from "react-icons/gi";
 
 const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
@@ -15,17 +14,15 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
   // }
   // const [user, setUser] = useState({});
   const onLoginSuccess = (credentialResponse: any) => {
-    let data = (jwt_decode(credentialResponse?.credential ?? "") ??
-      {}) as Record<string, any>;
-    fetch(
-      process.env.NEXT_PUBLIC_WEB_ENDPOINT +
-        "/api/check-email/" +
-        Buffer.from(data.email).toString("base64")
-    ).then((tempData) => {
-      tempData.json().then((finalData) => {
-        // console.log(finalData);
-      });
-    });
+    const data = (jwtDecode(credentialResponse?.credential ?? "") ?? {}) as Record<string, any>;
+    fetch(process.env.NEXT_PUBLIC_WEB_ENDPOINT + "/api/check-email/" + Buffer.from(data.email).toString("base64")).then(
+      (tempData) => {
+        tempData.json().then((finalData) => {
+          // eslint-disable-next-line no-console
+          console.log(finalData);
+        });
+      }
+    );
   };
   const ref = passedRef as RefObject<HTMLDialogElement>;
   const closeHandler = () => {
@@ -49,12 +46,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
         <label htmlFor="password" className="password">
           Password :
         </label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          name="passowrd"
-        />
+        <input type="password" id="password" placeholder="Password" name="passowrd" />
         <div className="op">
           <input type="checkbox" id="rem" name="rem" />
           <label htmlFor="rem">Remember Me</label>
@@ -72,6 +64,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
           logo_alignment="center"
           onSuccess={onLoginSuccess}
           onError={() => {
+            // eslint-disable-next-line no-console
             console.log("Login Failed");
           }}
         />
