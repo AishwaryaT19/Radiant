@@ -13,19 +13,6 @@ export default function Product({ data }: { data: ProductProp }) {
   );
 }
 
-// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-//   const products: any =
-//     (await gqlclient.request(getSingleProduct, {
-//       productName: String(query.product).replaceAll("-", " "),
-//     })) ?? {};
-//   const product: ProductProp = products?.productsCollection?.items[0] ?? {};
-//   return {
-//     props: {
-//       data: product,
-//     },
-//   };
-// };
-
 export const getStaticPaths: GetStaticPaths = async () => {
   const ProductNamesArr: any = (
     (await gqlclient.request(getProductNamesAndCategories)) as any

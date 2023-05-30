@@ -6,11 +6,11 @@ import { buttonText, mainHeading, subHeading } from "./text";
 export default function LandingBanner() {
   return (
     <div className="landing">
-      <div className="head">
+      <main className="head">
         <h1>{mainHeading}</h1>
-        <span>{subHeading}</span>
+        <p>{subHeading}</p>
         <Link href="/#category">{buttonText}</Link>
-      </div>
+      </main>
       <div className="img-container">
         <Image priority src="/logo.png" alt="main-logo" sizes="100%" fill />
       </div>

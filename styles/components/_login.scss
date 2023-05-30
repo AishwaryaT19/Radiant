@@ -85,6 +85,9 @@
       font-size: 0.85rem;
       padding-bottom: 5%;
     }
+    button {
+      cursor: pointer;
+    }
     button:nth-of-type(1) {
       font-size: 1.5rem;
       margin: 5%;
@@ -102,6 +105,25 @@
       text-transform: capitalize;
       background-color: var(--primary-fade-color);
       @include flexType(row, space-around, center);
+    }
+    &.signup {
+      height: 840px;
+
+      label {
+        width: 80%;
+        margin: auto;
+      }
+      input {
+        margin-bottom: 2%;
+      }
+      .location {
+        width: 90%;
+        @include flexType(row, space-between, center);
+        & > div {
+          width: 50%;
+          @include flexType(column, center, center);
+        }
+      }
     }
   }
 }
