@@ -21,18 +21,14 @@
     rgb(110, 185, 215),
     rgb(110, 185, 215)
   );
-  --secondary-gradient: linear-gradient(
-    to bottom,
-    var(--secondary-color),
-    var(--primary-fade-color)
-  );
-  --tertiary-gradient: linear-gradient(
-    to bottom,
-    var(--primary-color),
-    var(--primary-fade-color)
-  );
+  --secondary-gradient: linear-gradient(to bottom, var(--secondary-color), var(--primary-fade-color));
+  --tertiary-gradient: linear-gradient(to bottom, var(--primary-color), var(--primary-fade-color));
   --header-height: 8vh;
+  --footer-height: 20vh;
   --secondary-color: #f2efe8;
   --primary-font: "Playfair Display", sans-serif;
   --header-font: "Pacifico", cursive, sans-serif;
+  @media only screen and (max-width: 900px) {
+    --footer-height: 15vh;
+  }
 }

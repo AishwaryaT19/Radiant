@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import Header from "@/components/header";
 import Login from "@/components/login";
 import AC from "@/provider/app-context";
+import Footer from "@/components/footer";
 
 export default function App({ Component, pageProps }: AppProps) {
   const loginRef = useRef<HTMLDialogElement>(null);
@@ -12,6 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Login ref={loginRef} />
       <Header loginRef={loginRef} />
       <Component {...pageProps} />
+      <Footer />
     </AC>
   );
 }

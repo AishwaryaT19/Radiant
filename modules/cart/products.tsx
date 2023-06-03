@@ -65,6 +65,7 @@ function ItemCard({
   id: string;
 }) {
   const [cart, setCart] = useCart();
+  console.log(noi);
   return (
     <div className="item-card">
       <div className="img-container">

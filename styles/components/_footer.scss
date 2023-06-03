@@ -1,0 +1,22 @@
+#footer {
+  height: var(--footer-height);
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+  background-color: black;
+  color: white;
+  .img-container {
+    height: 150px;
+    aspect-ratio: 1;
+  }
+  .navigation {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 1vh;
+    a {
+      text-decoration: none;
+      color: white;
+    }
+  }
+}
