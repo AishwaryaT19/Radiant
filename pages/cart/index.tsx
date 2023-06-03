@@ -1,6 +1,6 @@
 import React from "react";
-import Products from "@/modules/cart/products";
 import Prices from "@/modules/cart/prices";
+import Products from "@/modules/cart/products";
 
 export default function Cart() {
   return (

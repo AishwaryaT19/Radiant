@@ -1,5 +1,6 @@
 import { useContext } from "react";
-import { AppContext, type AppContextType } from "../provider/app-context";
+import { AppContext } from "../provider/app-context";
+import type { AppContextType } from "../provider/app-context";
 
 export function useGetCart() {
   return useContext(AppContext).cart.state;
@@ -7,15 +8,14 @@ export function useGetCart() {
 
 export function useSetCart() {
   const setCartFun = useContext(AppContext).cart.setState;
-  const setterFunction = (prop: AppContextType["cart"]["state"]) => {
-    setCartFun(prop);
-  };
-  return setterFunction;
+  return setCartFun;
 }
 
 export function useCart() {
-  const cart = useGetCart();
-  const setCart = useSetCart();
-  const forReturn: [AppContextType["cart"]["state"], (prop: AppContextType["cart"]["state"]) => void] = [cart, setCart];
+  type StateType = AppContextType["cart"]["state"];
+  type SetStateType = AppContextType["cart"]["setState"];
+  const cart: StateType = useGetCart();
+  const setCart: SetStateType = useSetCart();
+  const forReturn: [StateType, SetStateType] = [cart, setCart];
   return forReturn;
 }

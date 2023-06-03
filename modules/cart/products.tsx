@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { RiDeleteBin2Fill } from "react-icons/ri";
-import { useCart } from "@/hooks/use-cart";
+import { useCart, useSetCart } from "@/hooks/use-cart";
 import type { CartType } from "@/provider/app-context";
 
 export default function Products() {
@@ -13,16 +13,13 @@ export default function Products() {
   };
 
   const mapper = (cartValue: CartType, index: number) => {
-    return (
-      <ItemCard
-        img={{ src: cartValue.url, alt: cartValue.name }}
-        name={cartValue.name}
-        noi={cartValue.numberOfItems}
-        price={cartValue.price}
-        id={Object.keys(cart)[index] ?? ""}
-        key={index}
-      />
-    );
+    const img = { src: cartValue.url, alt: cartValue.name };
+    const name = cartValue.name;
+    const noi = cartValue.numberOfItems;
+    const price = cartValue.price;
+    const id = Object.keys(cart)[index] ?? "";
+    const key = index;
+    return <ItemCard img={img} name={name} noi={noi} price={price} id={id} key={key} />;
   };
   return (
     <div className="Products">
@@ -64,7 +61,43 @@ function ItemCard({
   price: number;
   id: string;
 }) {
-  const [cart, setCart] = useCart();
+  const setCart = useSetCart();
+  const onMinus = () => {
+    setCart((tempCart) => {
+      const tempCurrentItem = tempCart[`${id}`] as CartType;
+      if (tempCurrentItem === undefined) throw new Error();
+      if (noi - 1 === 0) {
+        const temp = { ...tempCart };
+        delete temp[`${id}`];
+        return temp;
+      }
+      const temp = { ...tempCart };
+      temp[`${id}`] = {
+        ...tempCurrentItem,
+        numberOfItems: noi - 1
+      };
+      return temp;
+    });
+  };
+  const onPlus = () => {
+    setCart((prevCart) => {
+      const tempCart = { ...prevCart };
+      const tempCurrentItem = tempCart[`${id}`];
+      if (tempCurrentItem === undefined) return tempCart;
+      tempCart[`${id}`] = {
+        ...tempCurrentItem,
+        numberOfItems: noi + 1
+      };
+      return tempCart;
+    });
+  };
+  const onDel = () => {
+    setCart((prevCart) => {
+      const tempCart = { ...prevCart };
+      delete tempCart[`${id}`];
+      return tempCart;
+    });
+  };
   return (
     <div className="item-card">
       <div className="img-container">
@@ -72,54 +105,16 @@ function ItemCard({
       </div>
       <h4>{name}</h4>
       <div className="count">
-        <button
-          type="button"
-          onClick={() => {
-            const tempCart = cart;
-            const tempCurrentItem = tempCart[`${id}`] as CartType;
-            if (tempCurrentItem === undefined) throw new Error();
-            if (noi - 1 === 0) {
-              delete tempCart[`${id}`];
-              setCart(tempCart);
-              return;
-            }
-            tempCart[`${id}`] = {
-              ...tempCurrentItem,
-              numberOfItems: noi - 1
-            };
-            setCart(tempCart);
-          }}
-        >
+        <button type="button" onClick={onMinus}>
           -
         </button>
         <span>{noi}</span>
-        <button
-          type="button"
-          onClick={() => {
-            const tempCart = cart;
-            const tempCurrentItem = tempCart[`${id}`] as CartType;
-            if (tempCurrentItem === undefined) return;
-            tempCart[`${id}`] = {
-              ...tempCurrentItem,
-              numberOfItems: noi + 1
-            };
-            setCart(tempCart);
-          }}
-        >
+        <button type="button" onClick={onPlus}>
           +
         </button>
       </div>
       <span>Rs {price * noi}</span>
-      <button
-        title="cancel"
-        type="button"
-        className="cancel"
-        onClick={() => {
-          const tempCart = cart;
-          delete tempCart[`${id}`];
-          setCart(tempCart);
-        }}
-      >
+      <button title="cancel" type="button" className="cancel" onClick={onDel}>
         <RiDeleteBin2Fill />
       </button>
     </div>

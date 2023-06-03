@@ -1,12 +1,11 @@
 import React, { type RefObject, type Ref, forwardRef, useState, FormEventHandler } from "react";
 import Link from "next/link";
 import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { GiCancel } from "react-icons/gi";
 import { useSetUser } from "@/hooks/use-user";
 import type { UserType } from "@/provider/app-context";
-import axios from "axios";
-import { type } from "os";
 
 interface GoogleUserType {
   iss: string;
@@ -34,8 +33,6 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
     fetch(process.env.NEXT_PUBLIC_WEB_ENDPOINT + "/api/check-email/" + Buffer.from(data.email).toString("base64")).then(
       (tempData) => {
         tempData.json().then((finalData: UserType[]) => {
-          // eslint-disable-next-line no-console
-          console.log(finalData);
           if (finalData.length > 0) {
             setUser(finalData[0]);
             ref?.current?.close();
@@ -51,6 +48,11 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
     if (ref.current) {
       ref.current.close();
     }
+  };
+  const onLoginFailure = () => {
+    alert("Something went wrong");
+    setIsRegister(false);
+    closeHandler();
   };
   const onRegister: FormEventHandler = (event) => {
     event.preventDefault();
@@ -87,12 +89,11 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
       .then((res) => {
         if (res.status === 200) {
           setIsRegister(false);
-          console.log(res.data);
           closeHandler();
         }
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
+        onLoginFailure();
       });
   };
   return (
@@ -200,10 +201,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
             shape="pill"
             logo_alignment="center"
             onSuccess={onLoginSuccess}
-            onError={() => {
-              // eslint-disable-next-line no-console
-              console.log("Login Failed");
-            }}
+            onError={onLoginFailure}
           />
         </form>
       )}
