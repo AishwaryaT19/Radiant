@@ -41,6 +41,9 @@ export default function Footer() {
           </Link>
         </div>
       </div>
+      <div className="desc">
+        <span>{infs[0]?.inf}</span>
+      </div>
     </footer>
   );
 }
