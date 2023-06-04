@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { RiInstagramFill, RiMailCloseFill, RiPhoneFill } from "react-icons/ri";
+import { RiInstagramFill, RiMailFill, RiPhoneFill } from "react-icons/ri";
 
 export const infs = [
   {
@@ -34,7 +34,7 @@ export default function Footer() {
             <RiPhoneFill />
           </Link>
           <Link href={"mailto:" + infs[0]?.email} target="_blank" rel="noopener noreferrer">
-            <RiMailCloseFill />
+            <RiMailFill />
           </Link>
           <Link href={insta} target="_blank" rel="noopener noreferrer">
             <RiInstagramFill />

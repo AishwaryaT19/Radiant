@@ -1,11 +1,11 @@
 #footer {
   height: var(--footer-height);
   width: 100%;
-  display: grid;
+  @include gridDis();
   grid-template-columns: repeat(4, 1fr);
-  place-items: center;
   background-color: black;
   color: white;
+  padding: 0 4vw;
   .img-container {
     height: 150px;
     aspect-ratio: 1;
@@ -19,6 +19,32 @@
       text-decoration: none;
       color: white;
       cursor: pointer;
+    }
+  }
+  .contact {
+    @include gridDis();
+    gap: 2vh;
+    & > h2 {
+      text-transform: capitalize;
+      font-size: 1.5rem;
+    }
+    & > .touch {
+      @include gridDis();
+      width: 100%;
+      grid-template-columns: repeat(3, 1fr);
+      & > a {
+        @include gridDis();
+        width: fit-content;
+        color: white;
+        font-size: 1.25rem;
+      }
+    }
+  }
+  .desc {
+    display: grid;
+    & > span {
+      width: 100%;
+      text-align: right;
     }
   }
 }
