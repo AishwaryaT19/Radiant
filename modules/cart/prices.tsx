@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import { useGetLoginModal } from "@/hooks/use-login-modal";
 import { useGetUser } from "@/hooks/use-user";
 
@@ -15,10 +16,15 @@ const mapper = (elem: any, index: number) => {
 
 export default function Prices() {
   const user = useGetUser();
+  const router = useRouter();
   const loginModalRef = useGetLoginModal();
   const loginButtonHandler = () => {
-    if (loginModalRef?.current) {
+    if (user) {
+      router.push("/cart/checkout");
+    } else if (loginModalRef?.current) {
       loginModalRef.current.showModal();
+    } else {
+      alert("something went wrong");
     }
   };
   return (
