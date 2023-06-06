@@ -36,18 +36,21 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
   const onLoginSuccess = (credentialResponse: any) => {
     const data = (jwtDecode(credentialResponse?.credential ?? "") ?? {}) as GoogleUserType;
     setGoogleUser(data);
-    fetch(process.env.NEXT_PUBLIC_WEB_ENDPOINT + "/api/check-email/" + Buffer.from(data.email).toString("base64")).then(
-      (tempData) => {
-        tempData.json().then((finalData: UserType[]) => {
-          if (finalData.length > 0) {
-            setUser(finalData[0]);
-            ref?.current?.close();
-          } else {
-            setIsRegister(true);
-          }
-        });
-      }
-    );
+    const postUrl = "/api/check-email/";
+    const email = Buffer.from(data.email).toString("base64");
+    axios
+      .post(postUrl, { email: email })
+      .then((res) => {
+        setUser(res.data[0]);
+        closeHandler();
+      })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          setIsRegister(true);
+        } else {
+          alert("Something went wrong");
+        }
+      });
   };
   const closeHandler = () => {
     if (ref.current) {
@@ -94,6 +97,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
       .then((res) => {
         if (res.status === 200) {
           setIsRegister(false);
+          setUser(newUser);
           closeHandler();
         }
       })
