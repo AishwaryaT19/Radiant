@@ -59,7 +59,7 @@ interface ProviderProps {
 export default function AC(props: ProviderProps) {
   const [cart, setCart] = useState<Record<string, CartType>>(appContextInit.cart.state);
   const [user, setUser] = useState<UserType | undefined>(appContextInit.user.state);
-  const [loginModal, setLoginModal] = useState<RefObject<HTMLDialogElement>>(appContextInit.loginModalRef.state);
+  const [loginModalRef, setLoginModalRef] = useState<RefObject<HTMLDialogElement>>(appContextInit.loginModalRef.state);
   const contextProviderValue: AppContextType = {
     cart: {
       state: cart,
@@ -70,8 +70,8 @@ export default function AC(props: ProviderProps) {
       setState: setUser
     },
     loginModalRef: {
-      state: loginModal,
-      setState: setLoginModal
+      state: loginModalRef,
+      setState: setLoginModalRef
     }
   };
 

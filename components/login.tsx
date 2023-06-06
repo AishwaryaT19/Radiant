@@ -1,4 +1,4 @@
-import React, { type RefObject, type Ref, forwardRef, useState, FormEventHandler } from "react";
+import React, { type RefObject, type Ref, forwardRef, useState, FormEventHandler, useEffect } from "react";
 import Link from "next/link";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
@@ -6,6 +6,7 @@ import jwtDecode from "jwt-decode";
 import { GiCancel } from "react-icons/gi";
 import { useSetUser } from "@/hooks/use-user";
 import type { UserType } from "@/provider/app-context";
+import { useSetLoginModal } from "@/hooks/use-login-modal";
 
 interface GoogleUserType {
   iss: string;
@@ -27,6 +28,11 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
   const setUser = useSetUser();
   const [googleUser, setGoogleUser] = useState<GoogleUserType>();
   const [isRegister, setIsRegister] = useState<boolean>(false);
+  const setLoginModalRef = useSetLoginModal();
+  const ref = passedRef as RefObject<HTMLDialogElement>;
+  useEffect(() => {
+    setLoginModalRef(ref);
+  }, [ref, setLoginModalRef]);
   const onLoginSuccess = (credentialResponse: any) => {
     const data = (jwtDecode(credentialResponse?.credential ?? "") ?? {}) as GoogleUserType;
     setGoogleUser(data);
@@ -43,7 +49,6 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
       }
     );
   };
-  const ref = passedRef as RefObject<HTMLDialogElement>;
   const closeHandler = () => {
     if (ref.current) {
       ref.current.close();
@@ -72,7 +77,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
     const newUser: TempUser = {
       name: googleUser?.name ?? "User",
       email: googleUser?.email ?? "radiantbodyworkscandle@gmail.com",
-      imageUrl: googleUser?.picture ?? "/logo.png",
+      image: googleUser?.picture ?? "/logo.png",
       password: target[0]?.value ?? "",
       phoneNumber: Number(target[2]?.value ?? "91" + target[3]?.value ?? "9748488739"),
       address: {

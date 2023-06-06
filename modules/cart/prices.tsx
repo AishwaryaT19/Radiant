@@ -1,18 +1,8 @@
 import React from "react";
-import Link from "next/link";
-import { RefType } from "@/components/header";
-import { useGetUser } from "@/hooks/use-user";
 import { useGetLoginModal } from "@/hooks/use-login-modal";
+import { useGetUser } from "@/hooks/use-user";
 
 const data: any = [
-  // {
-  //   name: "subtotal",
-  //   price: 400,
-  // },
-  // {
-  //   name: "discount",
-  //   price: 400,
-  // },
   {
     name: "total ...",
     price: 400
@@ -31,7 +21,6 @@ export default function Prices() {
       loginModalRef.current.showModal();
     }
   };
-  console.log(loginModalRef);
   return (
     <div className="prices">
       <h3>Promo Code</h3>
