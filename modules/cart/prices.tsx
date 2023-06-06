@@ -1,5 +1,8 @@
 import React from "react";
 import Link from "next/link";
+import { RefType } from "@/components/header";
+import { useGetUser } from "@/hooks/use-user";
+import { useGetLoginModal } from "@/hooks/use-login-modal";
 
 const data: any = [
   // {
@@ -21,6 +24,14 @@ const mapper = (elem: any, index: number) => {
 };
 
 export default function Prices() {
+  const user = useGetUser();
+  const loginModalRef = useGetLoginModal();
+  const loginButtonHandler = () => {
+    if (loginModalRef?.current) {
+      loginModalRef.current.showModal();
+    }
+  };
+  console.log(loginModalRef);
   return (
     <div className="prices">
       <h3>Promo Code</h3>
@@ -31,7 +42,7 @@ export default function Prices() {
         </button>
       </div>
       {data.map(mapper)}
-      <Link href="/cart/checkout">Continue to Checkout</Link>
+      <button onClick={loginButtonHandler}>Continue to Checkout</button>
     </div>
   );
 }

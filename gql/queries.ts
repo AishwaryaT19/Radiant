@@ -28,9 +28,7 @@ export const getTestimonials = gql`
 
 export const getProductByCategories = gql`
   query ($collectionType: String!) {
-    productsCollection(
-      where: { category: { title_contains: $collectionType } }
-    ) {
+    productsCollection(where: { category: { title_contains: $collectionType } }) {
       items {
         name
         bannnerImage {
@@ -102,6 +100,34 @@ export const getProductNamesAndCategories = gql`
         category {
           title
         }
+      }
+    }
+  }
+`;
+
+export const getAboutData = gql`
+  query {
+    aboutCollection(limit: 1) {
+      items {
+        description
+        image {
+          url
+        }
+        buttonText
+        buttonLink
+      }
+    }
+  }
+`;
+
+export const getLandingPageData = gql`
+  query {
+    landingPageCollection(limit: 1) {
+      items {
+        heading
+        subHeading
+        buttonText
+        buttonLink
       }
     }
   }

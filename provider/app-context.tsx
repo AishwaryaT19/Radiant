@@ -1,4 +1,4 @@
-import React, { ReactNode, useState, Dispatch, SetStateAction, createContext } from "react";
+import React, { ReactNode, useState, Dispatch, SetStateAction, createContext, RefObject } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export interface CartType {
@@ -10,7 +10,7 @@ export interface CartType {
 export interface UserType {
   name: string;
   email: string;
-  imageUrl: string;
+  image: string;
   phoneNumber: number;
   address: {
     buildingDetails: string;
@@ -21,6 +21,7 @@ export interface UserType {
     state: string;
   };
 }
+
 export interface AppContextType {
   cart: {
     state: Record<string, CartType>;
@@ -30,6 +31,10 @@ export interface AppContextType {
     state: UserType | undefined;
     setState: Dispatch<SetStateAction<UserType | undefined>>;
   };
+  loginModalRef: {
+    state: RefObject<HTMLDialogElement>;
+    setState: Dispatch<SetStateAction<RefObject<HTMLDialogElement>>>;
+  };
 }
 const appContextInit: AppContextType = {
   cart: {
@@ -38,6 +43,10 @@ const appContextInit: AppContextType = {
   },
   user: {
     state: undefined,
+    setState: () => undefined
+  },
+  loginModalRef: {
+    state: undefined as unknown as RefObject<HTMLDialogElement>,
     setState: () => undefined
   }
 };
@@ -50,7 +59,7 @@ interface ProviderProps {
 export default function AC(props: ProviderProps) {
   const [cart, setCart] = useState<Record<string, CartType>>(appContextInit.cart.state);
   const [user, setUser] = useState<UserType | undefined>(appContextInit.user.state);
-
+  const [loginModal, setLoginModal] = useState<RefObject<HTMLDialogElement>>(appContextInit.loginModalRef.state);
   const contextProviderValue: AppContextType = {
     cart: {
       state: cart,
@@ -59,6 +68,10 @@ export default function AC(props: ProviderProps) {
     user: {
       state: user,
       setState: setUser
+    },
+    loginModalRef: {
+      state: loginModal,
+      setState: setLoginModal
     }
   };
 
