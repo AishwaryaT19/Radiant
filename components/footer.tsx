@@ -17,15 +17,15 @@ export const insta = "https://www.instagram.com/anime/"; //instagram link
 export default function Footer() {
   return (
     <footer id="footer">
-      <div className="img-container">
+      <Link href="/#landing-page" className="img-container">
         <Image src="/logo.png" alt="logo" sizes="100%" fill />
-      </div>
+      </Link>
       <nav className="navigation">
-        <Link href="/">Home</Link>
-        <Link href="/">Categories</Link>
-        <Link href="/">About Us</Link>
-        <Link href="/">Testimonials</Link>
-        <Link href="/">Contact Us</Link>
+        <Link href="/#landing-page">Home</Link>
+        <Link href="/#category">Categories</Link>
+        <Link href="/#about">About Us</Link>
+        <Link href="/#testimonials">Testimonials</Link>
+        <Link href="/#contact">Contact Us</Link>
       </nav>
       <div className="contact">
         <h2>get in touch</h2>

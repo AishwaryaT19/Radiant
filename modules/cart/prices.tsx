@@ -1,15 +1,9 @@
 import React from "react";
-import Link from "next/link";
+import { useRouter } from "next/router";
+import { useGetLoginModal } from "@/hooks/use-login-modal";
+import { useGetUser } from "@/hooks/use-user";
 
 const data: any = [
-  // {
-  //   name: "subtotal",
-  //   price: 400,
-  // },
-  // {
-  //   name: "discount",
-  //   price: 400,
-  // },
   {
     name: "total ...",
     price: 400
@@ -21,6 +15,18 @@ const mapper = (elem: any, index: number) => {
 };
 
 export default function Prices() {
+  const user = useGetUser();
+  const router = useRouter();
+  const loginModalRef = useGetLoginModal();
+  const loginButtonHandler = () => {
+    if (user) {
+      router.push("/cart/checkout");
+    } else if (loginModalRef?.current) {
+      loginModalRef.current.showModal();
+    } else {
+      alert("something went wrong");
+    }
+  };
   return (
     <div className="prices">
       <h3>Promo Code</h3>
@@ -31,7 +37,9 @@ export default function Prices() {
         </button>
       </div>
       {data.map(mapper)}
-      <Link href="/cart/checkout">Continue to Checkout</Link>
+      <button className="check" onClick={loginButtonHandler}>
+        Continue to Checkout
+      </button>
     </div>
   );
 }
