@@ -1,5 +1,6 @@
-.register {
+.register[open] {
   margin: auto;
+  max-height: 100vh;
   &::backdrop {
     background-color: rgba(0, 0, 0, 0.6);
   }
@@ -107,8 +108,12 @@
       @include flexType(row, space-around, center);
     }
     &.signup {
-      height: 840px;
-
+      height: 800px;
+      .number {
+        width: 100%;
+        display: grid;
+        place-items: center;
+      }
       label {
         width: 80%;
         margin: auto;
@@ -125,5 +130,54 @@
         }
       }
     }
+  }
+  @media only screen and (max-width: 700px) {
+    .options {
+      width: 450px;
+    }
+    form {
+      width: 450px;
+    }
+  }
+  @media only screen and (max-width: 525px) {
+    .options {
+      width: 300px;
+    }
+    form {
+      width: 300px;
+    }
+  }
+  @media only screen and (max-width: 300px) {
+    .options {
+      width: 230px;
+      > div {
+        font-size: 0.9rem;
+      }
+    }
+    form {
+      width: 230px;
+      height: 90vh;
+    }
+  }
+}
+.logout {
+  height: 80px;
+  width: 100px;
+  background-color: var(--primary-fade-color);
+  display: grid;
+  top: var(--header-height);
+  margin-left: 85%;
+  & > button {
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    &:hover {
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  }
+  @media only screen and (max-width: 900px) {
+    margin-left: 70%;
   }
 }

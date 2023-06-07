@@ -37,7 +37,9 @@ export default function Prices() {
         </button>
       </div>
       {data.map(mapper)}
-      <button onClick={loginButtonHandler}>Continue to Checkout</button>
+      <button className="check" onClick={loginButtonHandler}>
+        Continue to Checkout
+      </button>
     </div>
   );
 }

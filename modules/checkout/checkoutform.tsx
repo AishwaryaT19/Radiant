@@ -1,7 +1,15 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { useGetUser } from "@/hooks/use-user";
 
 export default function Checkoutform() {
   const user = useGetUser();
+  const router = useRouter();
+  useEffect(() => {
+    if (!user) {
+      router.push("/cart");
+    }
+  }, [router, user]);
   return (
     <div className="check">
       <div className="title">
@@ -17,15 +25,15 @@ export default function Checkoutform() {
           name="number"
           placeholder="Phone Number"
           required
-          defaultValue={String(user?.phoneNumber)}
+          defaultValue={user?.phoneNumber}
         />
-        <input type="text" placeholder="Street" defaultValue={user?.address?.street} />
-        <input type="text" placeholder="Building" />
-        <input type="text" placeholder="Landmark" />
-        <input type="text" placeholder="City" />
+        <input type="text" placeholder="Street" defaultValue={user?.addressStreet} />
+        <input type="text" placeholder="Building" defaultValue={user?.addressBuilding} />
+        <input type="text" placeholder="Landmark" defaultValue={user?.addressLandmark} />
+        <input type="text" placeholder="City" defaultValue={user?.addressCity} />
         <div className="state">
-          <input type="state" placeholder="State" />
-          <input type="" placeholder="Pincode" />
+          <input type="state" placeholder="State" defaultValue={user?.addressState} />
+          <input type="" placeholder="Pincode" defaultValue={user?.addressPincode} />
         </div>
         <button type="submit">Pay Now</button>
       </form>

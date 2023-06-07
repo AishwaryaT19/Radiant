@@ -11,15 +11,13 @@ export interface UserType {
   name: string;
   email: string;
   image: string;
-  phoneNumber: number;
-  address: {
-    buildingDetails: string;
-    street: string;
-    landmark: string;
-    pincode: number;
-    city: string;
-    state: string;
-  };
+  phoneNumber: string;
+  addressBuilding: string;
+  addressCity: string;
+  addressLandmark: string;
+  addressPincode: number;
+  addressState: string;
+  addressStreet: string;
 }
 
 export interface AppContextType {

@@ -8,7 +8,6 @@
   border: 3px solid black;
   padding: 5vh 5vh;
   z-index: 2;
-
   .title {
     height: 20%;
     width: 100%;
@@ -23,33 +22,59 @@
       word-spacing: 0.1rem;
     }
   }
+
   .checkform {
     width: 100%;
-    height: 65%;
+    height: 80%;
     @include flexType(column, flex-start, center);
     & > input {
       width: 100%;
       @include Checkout();
       margin: auto;
+      background-color: var(--primary-fade-color);
+      &:focus {
+        background-color: var(--primary-color);
+      }
     }
     .state {
       width: 100%;
+      margin-top: 1.5%;
       @include flexType(row, space-between, center);
       & > input {
         width: 47.5%;
         @include Checkout();
         margin: auto 0;
+        background-color: var(--primary-fade-color);
+        &:focus {
+          background-color: var(--primary-color);
+        }
       }
     }
     & > button {
-      margin: auto;
-      width: 100px;
-      height: 30px;
+      margin-top: 3%;
+      width: 150px;
+      height: 45px;
       border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
       border: 1px solid black;
       background: var(--secondary-gradient);
       &:hover {
         background: var(--tertiary-gradient);
+      }
+    }
+  }
+  @media only screen and (max-width: 900px) {
+    height: 50vh;
+    padding: 2vh 2vh;
+    width: 97.5%;
+    .title {
+      height: 15%;
+      & > h3 {
+        font-size: 1rem;
+      }
+      & > h4 {
+        font-size: 0.9rem;
       }
     }
   }

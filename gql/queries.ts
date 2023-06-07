@@ -77,6 +77,30 @@ export const checkForEmail = gql`
       items {
         name
         image
+        addressBuilding
+        addressCity
+        addressLandmark
+        addressStreet
+        addressState
+        addressPincode
+        phoneNumber
+      }
+    }
+  }
+`;
+export const checkForCredentials = gql`
+  query ($email: String!, $password: String!) {
+    userCollection(where: { email: $email, password: $password }) {
+      items {
+        name
+        image
+        addressBuilding
+        addressCity
+        addressLandmark
+        addressStreet
+        addressState
+        addressPincode
+        phoneNumber
       }
     }
   }

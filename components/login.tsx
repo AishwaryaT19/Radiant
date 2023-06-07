@@ -1,12 +1,12 @@
-import React, { type RefObject, type Ref, forwardRef, useState, FormEventHandler, useEffect } from "react";
+import React, { type RefObject, type Ref, forwardRef, useState, FormEventHandler, useEffect, useRef } from "react";
 import Link from "next/link";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { GiCancel } from "react-icons/gi";
-import { useSetUser } from "@/hooks/use-user";
-import type { UserType } from "@/provider/app-context";
 import { useSetLoginModal } from "@/hooks/use-login-modal";
+import { useUser } from "@/hooks/use-user";
+import type { UserType } from "@/provider/app-context";
 
 interface GoogleUserType {
   iss: string;
@@ -25,11 +25,13 @@ interface GoogleUserType {
   jti: string;
 }
 const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
-  const setUser = useSetUser();
+  const [user, setUser] = useUser();
   const [googleUser, setGoogleUser] = useState<GoogleUserType>();
   const [isRegister, setIsRegister] = useState<boolean>(false);
   const setLoginModalRef = useSetLoginModal();
   const ref = passedRef as RefObject<HTMLDialogElement>;
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     setLoginModalRef(ref);
   }, [ref, setLoginModalRef]);
@@ -82,15 +84,13 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
       email: googleUser?.email ?? "radiantbodyworkscandle@gmail.com",
       image: googleUser?.picture ?? "/logo.png",
       password: target[0]?.value ?? "",
-      phoneNumber: Number(target[2]?.value ?? "91" + target[3]?.value ?? "9748488739"),
-      address: {
-        buildingDetails: target[4]?.value ?? "",
-        city: target[7]?.value ?? "",
-        landmark: target[6]?.value ?? "",
-        street: target[5]?.value ?? "",
-        pincode: Number(target[8]?.value ?? 700023),
-        state: target[9]?.value ?? ""
-      }
+      phoneNumber: (target[2]?.value ?? "91") + (target[3]?.value ?? "9748488739"),
+      addressBuilding: target[4]?.value ?? "",
+      addressCity: target[7]?.value ?? "",
+      addressLandmark: target[6]?.value ?? "",
+      addressStreet: target[5]?.value ?? "",
+      addressPincode: Number(target[8]?.value ?? 700023),
+      addressState: target[9]?.value ?? ""
     };
     axios
       .post("/api/create-user", newUser)
@@ -105,7 +105,47 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
         onLoginFailure();
       });
   };
-  return (
+  const onLogOut = () => {
+    const x = window.confirm("Are You Sure?");
+    if (x) {
+      setUser(undefined);
+    }
+    ref.current?.close();
+  };
+  const ManualLoginHandler = () => {
+    if (emailRef.current && passwordRef.current) {
+      const extractedEmail: string = emailRef.current.value;
+      const extractedPassword: string = passwordRef.current.value;
+      const checkingObject = {
+        email: extractedEmail,
+        password: extractedPassword
+      };
+      const credString = JSON.stringify(checkingObject);
+      const credentials = Buffer.from(credString).toString("base64");
+      const toSend = {
+        credentials: credentials
+      };
+      const postUrl = "/api/check-creds";
+      axios
+        .post(postUrl, toSend)
+        .then((res) => {
+          if (res.status === 200) {
+            setUser(res.data);
+            setIsRegister(false);
+            ref.current?.close();
+          }
+        })
+        .catch(() => {
+          onLoginFailure();
+        });
+    }
+  };
+  return user ? (
+    <dialog className="logout" ref={ref}>
+      <button onClick={onLogOut}>LogOut</button>
+      <button onClick={closeHandler}>close</button>
+    </dialog>
+  ) : (
     <dialog className="register" ref={ref}>
       <div className="options">
         {isRegister ? (
@@ -144,7 +184,6 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
             required
           />
           <div className="number">
-            <span>+</span>
             <label htmlFor="ccode">Country Code:</label>
             <input id="ccode" name="cc" placeholder="00" type="number" min="1" required defaultValue="91" />
             <label htmlFor="number">Phone Number:</label>
@@ -189,11 +228,11 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
           <label htmlFor="mail" className="mail">
             E-mail:
           </label>
-          <input type="email" id="mail" placeholder="E-mail" name="mail" />
+          <input type="email" id="mail" placeholder="E-mail" name="mail" ref={emailRef} required />
           <label htmlFor="password" className="password">
             Password :
           </label>
-          <input type="password" id="password" placeholder="Password" name="passowrd" />
+          <input type="password" id="password" placeholder="Password" name="passowrd" ref={passwordRef} required />
           <div className="op">
             <input type="checkbox" id="rem" name="rem" />
             <label htmlFor="rem">Remember Me</label>
@@ -201,7 +240,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
               Forgot Password
             </Link>
           </div>
-          <button type="submit" title="submit">
+          <button type="submit" title="submit" onClick={ManualLoginHandler}>
             Sign-in
           </button>
           <span>or Sign-in / Sign up with Google</span>
