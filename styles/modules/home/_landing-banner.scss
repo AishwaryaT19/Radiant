@@ -1,19 +1,12 @@
 .landing {
-  // display: flex;
   height: 80vh;
   width: 100%;
   overflow: hidden;
-  // justify-content: space-evenly;
   gap: 10vw;
   padding: 0 10vw;
   position: relative;
-  // background-image: var(--liner-gradient-main);
   font-family: "Playfair Display", sans-serif;
   @include flexType(row, space-evenly, center);
-  // box-shadow: inset 0px 0px 30px var(--secondary-color),
-  //   inset 0px 0px 30px var(--secondary-color),
-  //   inset 0px 0px 30px var(--secondary-color);
-
   &::before {
     content: "";
     position: absolute;
