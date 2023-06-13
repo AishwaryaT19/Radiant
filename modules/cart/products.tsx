@@ -11,7 +11,6 @@ export default function Products() {
       setCart({});
     }
   };
-
   const mapper = (cartValue: CartType, index: number) => {
     const img = { src: cartValue.url, alt: cartValue.name };
     const name = cartValue.name;
@@ -38,6 +37,7 @@ export default function Products() {
             products)
           </span>
         </div>
+
         <button onClick={cartClear}>clear cart</button>
       </div>
       <div className="items-container">{Object.values(cart).map(mapper)}</div>
