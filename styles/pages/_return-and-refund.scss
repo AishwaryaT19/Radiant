@@ -1,0 +1,7 @@
+#return {
+  background-color: var(--primary-fade-color);
+  min-height: calc(100vh - var(--footer-height) - var(--header-height));
+  p {
+    font-weight: 900;
+  }
+}

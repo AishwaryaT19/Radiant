@@ -5,7 +5,6 @@ import { RiInstagramFill, RiMailFill, RiPhoneFill } from "react-icons/ri";
 
 export const infs = [
   {
-    inf: "The company principle of Architecture-Studio is the collective conception.", //short info for footer
     number: 1234567899, //phone number
     email: "prague-architects@info.com" //mail
   }
@@ -41,8 +40,16 @@ export default function Footer() {
           </Link>
         </div>
       </div>
-      <div className="desc">
-        <span>{infs[0]?.inf}</span>
+      <div className="policies">
+        <Link href="/return-and-refund" target="_blank" rel="noopener noreferrer">
+          Return & Refund
+        </Link>
+        <Link href="/terms-of-service" target="_blank" rel="noopener noreferrer">
+          Terms of Service
+        </Link>
+        <Link href="/policies" target="_blank" rel="noopener noreferrer">
+          Policies
+        </Link>
       </div>
     </footer>
   );
