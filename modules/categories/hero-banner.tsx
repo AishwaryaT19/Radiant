@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import type { ProductProps } from "./types";
 
-export default function HeroBanner({ products }: ProductProps) {
+export default function HeroBanner({ products = [] }: ProductProps) {
   return (
     <div className="hero-banner">
       <div className="img-container">
