@@ -156,3 +156,14 @@ export const getLandingPageData = gql`
     }
   }
 `;
+
+export const getDiscount = gql`
+  query ($code: String!) {
+    promoCollection(where: { code: $code }) {
+      items {
+        code
+        discountPercentage
+      }
+    }
+  }
+`;
