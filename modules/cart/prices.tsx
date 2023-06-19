@@ -10,6 +10,7 @@ export default function Prices() {
   const router = useRouter();
   const cart = useGetCart();
   const [discount, setDiscount] = useState<number>(0);
+  const [disper, setDisPer] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const promoRef = useRef<HTMLInputElement>(null);
   const loginModalRef = useGetLoginModal();
@@ -30,7 +31,8 @@ export default function Prices() {
       .post(postUrl, { code: code })
       .then((res) => {
         alert("Discount Applied");
-        setDiscount(+((res.data[0].discountPercentage / 100) * totalPrice).toFixed(2));
+        setDisPer(res.data[0].discountPercentage);
+        setDiscount(+((disper / 100) * totalPrice).toFixed(2));
       })
       .catch((err) => {
         if (err.response.status === 404) {
@@ -50,7 +52,8 @@ export default function Prices() {
         return price + nprice;
       }, 0);
     setTotalPrice(+price.toFixed(2));
-  }, [cart]);
+    setDiscount(+((disper / 100) * totalPrice).toFixed(2));
+  }, [cart, totalPrice, disper]);
   return (
     <div className="prices">
       <h3>Promo Code</h3>
