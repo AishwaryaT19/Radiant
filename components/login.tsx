@@ -3,6 +3,7 @@ import Link from "next/link";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import { destroyCookie } from "nookies";
 import { GiCancel } from "react-icons/gi";
 import { useSetLoginModal } from "@/hooks/use-login-modal";
 import { useUser } from "@/hooks/use-user";
@@ -44,10 +45,11 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
       .post(postUrl, { email: email })
       .then((res) => {
         setUser(res.data[0]);
+
         closeHandler();
       })
       .catch((err) => {
-        if (err.response.status === 404) {
+        if (err?.response?.status === 404) {
           setIsRegister(true);
         } else {
           alert("Something went wrong");
@@ -60,7 +62,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
     }
   };
   const onLoginFailure = () => {
-    alert("Something went wrong");
+    alert("Something went wrong - login failure");
     setIsRegister(false);
     closeHandler();
   };
@@ -98,6 +100,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
         if (res.status === 200) {
           setIsRegister(false);
           setUser(newUser);
+
           closeHandler();
         }
       })
@@ -109,6 +112,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
     const x = window.confirm("Are You Sure?");
     if (x) {
       setUser(undefined);
+      destroyCookie(null, "user");
     }
     ref.current?.close();
   };
@@ -131,6 +135,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
         .then((res) => {
           if (res.status === 200) {
             setUser(res.data);
+
             setIsRegister(false);
             ref.current?.close();
           }
