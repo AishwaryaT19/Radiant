@@ -167,3 +167,16 @@ export const getDiscount = gql`
     }
   }
 `;
+
+export const getProductById = gql`
+  query ($id: String!) {
+    products(id: $id) {
+      name
+      price
+      salePercent
+      bannnerImage {
+        url
+      }
+    }
+  }
+`;

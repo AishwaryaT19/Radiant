@@ -36,6 +36,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
   useEffect(() => {
     setLoginModalRef(ref);
   }, [ref, setLoginModalRef]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onLoginSuccess = (credentialResponse: any) => {
     const data = (jwtDecode(credentialResponse?.credential ?? "") ?? {}) as GoogleUserType;
     setGoogleUser(data);
@@ -113,6 +114,7 @@ const Login = (_: unknown, passedRef: Ref<HTMLDialogElement>) => {
     if (x) {
       setUser(undefined);
       destroyCookie(null, "user");
+      destroyCookie(null, "cart");
     }
     ref.current?.close();
   };

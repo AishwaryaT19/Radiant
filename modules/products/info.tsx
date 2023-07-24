@@ -8,7 +8,11 @@ export default function Info(product: ProductProp) {
   const { sys, name, productDescription, price, salePercent, imagesCollection } = product;
   const id = sys.id;
   const [cart, setCart] = useCart();
-  const [amount, setAmount] = useState<number>(0);
+  const a: number = Object.values(cart)[0]?.numberOfItems ?? 0;
+  const [amount, setAmount] = useState<number>(a);
+  useEffect(() => {
+    setAmount(Object.values(cart)[0]?.numberOfItems ?? 0);
+  }, [cart]);
   const cartSetting = () => {
     setAmount(1);
   };

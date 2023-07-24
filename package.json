@@ -14,7 +14,8 @@
     "@contentful/rich-text-react-renderer": "^15.16.3",
     "@contentful/rich-text-types": "^16.0.3",
     "@react-oauth/google": "^0.11.0",
-    "@stripe/stripe-js": "^1.54.0",
+    "@stripe/react-stripe-js": "^2.1.1",
+    "@stripe/stripe-js": "^1.54.1",
     "@types/node": "18.15.11",
     "@types/react": "18.0.31",
     "@types/react-dom": "18.0.11",
@@ -31,7 +32,7 @@
     "react-icons": "^4.8.0",
     "sass": "^1.60.0",
     "sharp": "^0.32.1",
-    "stripe": "^12.9.0"
+    "stripe": "^12.14.0"
   },
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.0",

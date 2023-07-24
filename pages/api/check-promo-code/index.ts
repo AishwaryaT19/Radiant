@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(200).json(promo.promoCollection.items);
       } else throw new Error("No code found");
     } else throw new Error("No code provided");
-  } catch (e: any) {
-    res.status(404).json({ error: e?.message });
+  } catch (e: unknown) {
+    res.status(404).json({ error: "not found" });
   }
 }

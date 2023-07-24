@@ -5,6 +5,8 @@ import { useGetCart } from "@/hooks/use-cart";
 import { useGetLoginModal } from "@/hooks/use-login-modal";
 import { useGetUser } from "@/hooks/use-user";
 
+export let promocode: undefined | string = undefined;
+
 export default function Prices() {
   const user = useGetUser();
   const router = useRouter();
@@ -14,6 +16,7 @@ export default function Prices() {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const promoRef = useRef<HTMLInputElement>(null);
   const loginModalRef = useGetLoginModal();
+
   const loginButtonHandler = () => {
     if (user) {
       router.push("/cart/checkout");
@@ -31,6 +34,7 @@ export default function Prices() {
       .post(postUrl, { code: code })
       .then((res) => {
         alert("Discount Applied");
+        promocode = extractedPromo;
         setDisPer(res.data[0].discountPercentage);
         setDiscount(+((disper / 100) * totalPrice).toFixed(2));
       })

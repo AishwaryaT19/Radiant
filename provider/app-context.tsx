@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, useEffect, Dispatch, SetStateAction, createContext, RefObject } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { parseCookies, setCookie } from "nookies";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
 
 export interface CartType {
   name: string;
@@ -66,7 +66,13 @@ export default function AC(props: ProviderProps) {
       const cookieUserObj = JSON.parse(Buffer.from(cookieUserStr, "base64").toString("utf-8"));
       if (cookieUserObj?.name) {
         setUser(cookieUserObj);
+        if (cookies?.cart) {
+          const cookiesCartObj = JSON.parse(Buffer.from(cookies.cart, "base64").toString("utf-8"));
+          setCart(cookiesCartObj);
+        }
       }
+    } else {
+      destroyCookie(null, "user");
     }
   }, []);
   useEffect(() => {
@@ -77,6 +83,13 @@ export default function AC(props: ProviderProps) {
       });
     }
   }, [user]);
+  useEffect(() => {
+    if (Object.keys(cart).length > 0) {
+      setCookie(null, "cart", Buffer.from(JSON.stringify(cart)).toString("base64"), {
+        maxAge: 6 * 60 * 60
+      });
+    }
+  }, [cart]);
   const contextProviderValue: AppContextType = {
     cart: {
       state: cart,
