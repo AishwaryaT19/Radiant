@@ -8,34 +8,38 @@ export default function Info(product: ProductProp) {
   const { sys, name, productDescription, price, salePercent, imagesCollection } = product;
   const id = sys.id;
   const [cart, setCart] = useCart();
-  const a: number = Object.values(cart)[0]?.numberOfItems ?? 0;
+  let finalPrice = price;
+  const a: number = cart[`${id}`]?.numberOfItems ?? 0;
   const [amount, setAmount] = useState<number>(a);
-  useEffect(() => {
-    setAmount(Object.values(cart)[0]?.numberOfItems ?? 0);
-  }, [cart]);
   const cartSetting = () => {
     setAmount(1);
   };
+
   useEffect(() => {
     if (amount > 0) {
-      setCart({
-        ...cart,
-        [`${id}`]: {
-          name: name,
-          price: finalPrice,
-          url: imagesCollection?.items[0]?.url ?? "/logo.png",
-          numberOfItems: amount
-        }
+      setCart((preCart) => {
+        return {
+          ...preCart,
+          [`${id}`]: {
+            name: name,
+            price: finalPrice,
+            url: imagesCollection?.items[0]?.url ?? "/logo.png",
+            numberOfItems: amount
+          }
+        };
       });
     } else {
-      if (cart[`${id}`]) {
-        const tempCart = cart;
-        delete tempCart[`${id}`];
-        setCart(tempCart);
-      }
+      setCart((preCart) => {
+        if (preCart[`${id}`]) {
+          const tempCart = structuredClone(preCart);
+          delete tempCart[`${id}`];
+          return tempCart;
+        } else {
+          return structuredClone(preCart);
+        }
+      });
     }
-  }, [amount]);
-  let finalPrice = price;
+  }, [amount, finalPrice, id, imagesCollection, name, setCart]);
   if (salePercent !== null) {
     finalPrice = price - (salePercent / 100) * price;
   }
@@ -72,7 +76,7 @@ export default function Info(product: ProductProp) {
             <button
               onClick={() => {
                 setAmount((prevamt) => {
-                  return --prevamt;
+                  return prevamt - 1;
                 });
               }}
             >
@@ -82,7 +86,7 @@ export default function Info(product: ProductProp) {
             <button
               onClick={() => {
                 setAmount((prevamt) => {
-                  return ++prevamt;
+                  return prevamt + 1;
                 });
               }}
             >

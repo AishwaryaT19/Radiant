@@ -16,9 +16,19 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
           noi: number;
         }[];
         promo: string | undefined;
+        custDetails: {
+          name: string;
+          phoneNumber: string;
+          building: string;
+          street: string;
+          landmark: string;
+          city: string;
+          state: string;
+          pincode: string;
+        };
       } = JSON.parse(decryptedString);
-      const lineItems = [];
-      const discounts = [];
+      const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+      const discounts: Stripe.Checkout.SessionCreateParams.Discount[] = [];
       if (realData?.promo) {
         discounts.push({
           coupon: realData?.promo
@@ -38,8 +48,8 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
             price_data: {
               currency: "inr",
               product_data: {
-                name: product?.name
-                // images: [product?.bannerImage?.url ?? "/logo.png"]
+                name: product?.name,
+                images: [product?.bannnerImage?.url ?? "/logo.png"]
               },
               unit_amount: price * 100
             },

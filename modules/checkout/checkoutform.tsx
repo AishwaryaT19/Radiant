@@ -13,6 +13,7 @@ export default function Checkoutform() {
   const onSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+      const target = event.target as unknown as HTMLInputElement[];
       const cartArr: {
         id: string;
         noi: number;
@@ -20,8 +21,28 @@ export default function Checkoutform() {
       Object.keys(cart).forEach(function forEachInner(id) {
         cartArr.push({ id: id, noi: cart[id]?.numberOfItems ?? 0 });
       });
-
-      const finalCartString = Buffer.from(JSON.stringify({ cart: cartArr, promo: promocode })).toString("base64");
+      const custDeets: {
+        name: string;
+        phoneNumber: string;
+        building: string;
+        street: string;
+        landmark: string;
+        city: string;
+        state: string;
+        pincode: string;
+      } = {
+        name: target[0]?.value ?? "user",
+        phoneNumber: target[1]?.value ?? "",
+        building: target[3]?.value ?? "",
+        street: target[2]?.value ?? "",
+        landmark: target[4]?.value ?? "",
+        city: target[5]?.value ?? "",
+        state: target[6]?.value ?? "",
+        pincode: target[7]?.value ?? ""
+      };
+      const finalCartString = Buffer.from(
+        JSON.stringify({ cart: cartArr, promo: promocode, custDetails: custDeets })
+      ).toString("base64");
       axios
         .post("/api/checkout", { data: finalCartString })
         .then((res) => {
@@ -29,7 +50,7 @@ export default function Checkoutform() {
             router.push(res.data.url);
           }
         })
-        .catch((e) => console.log(e));
+        .catch();
     },
     [cart]
   );
@@ -54,15 +75,15 @@ export default function Checkoutform() {
           name="number"
           placeholder="Phone Number"
           required
-          defaultValue={user?.phoneNumber}
+          defaultValue={user?.phoneNumber.substring(2)}
         />
-        <input type="text" placeholder="Street" defaultValue={user?.addressStreet} />
+        <input type="text" placeholder="Street" required defaultValue={user?.addressStreet} />
         <input type="text" placeholder="Building" defaultValue={user?.addressBuilding} />
         <input type="text" placeholder="Landmark" defaultValue={user?.addressLandmark} />
         <input type="text" placeholder="City" defaultValue={user?.addressCity} />
         <div className="state">
-          <input type="state" placeholder="State" defaultValue={user?.addressState} />
-          <input type="" placeholder="Pincode" defaultValue={user?.addressPincode} />
+          <input type="state" placeholder="State" required defaultValue={user?.addressState} />
+          <input type="" placeholder="Pincode" required defaultValue={user?.addressPincode} />
         </div>
         <button type="submit">Pay Now</button>
       </form>
