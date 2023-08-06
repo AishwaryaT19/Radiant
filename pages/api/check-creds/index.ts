@@ -4,12 +4,13 @@ import { checkForCredentials } from "@/gql/queries";
 
 export default async function credHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    if (req.method == "POST" && req.body?.credentials) {
+    if (req.method === "POST" && req.body?.credentials) {
       const rawCredentials = req.body.credentials;
       const credentialString = Buffer.from(rawCredentials, "base64").toString("utf-8");
       const credentials = JSON.parse(credentialString);
       const email = credentials.email;
       const password = credentials.password;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const userInfo: any = await gqlclient.request(checkForCredentials, {
         email: email,
         password: password

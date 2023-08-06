@@ -2,13 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { RiInstagramFill, RiMailFill, RiPhoneFill } from "react-icons/ri";
-
-export const infs = [
-  {
-    number: 1234567899, //phone number
-    email: "prague-architects@info.com" //mail
-  }
-];
+import { email, phoneNumber } from "@/common-data";
 
 //socials
 export const insta = "https://www.instagram.com/anime/"; //instagram link
@@ -29,10 +23,10 @@ export default function Footer() {
       <div className="contact">
         <h2>get in touch</h2>
         <div className="touch">
-          <Link href={"tel:" + infs[0]?.number} target="_blank" rel="noopener noreferrer">
+          <Link href={"tel:" + phoneNumber} target="_blank" rel="noopener noreferrer">
             <RiPhoneFill />
           </Link>
-          <Link href={"mailto:" + infs[0]?.email} target="_blank" rel="noopener noreferrer">
+          <Link href={"mailto:" + email} target="_blank" rel="noopener noreferrer">
             <RiMailFill />
           </Link>
           <Link href={insta} target="_blank" rel="noopener noreferrer">
