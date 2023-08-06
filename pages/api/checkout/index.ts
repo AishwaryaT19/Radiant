@@ -1,10 +1,49 @@
 /* eslint-disable camelcase */
 import type { NextApiHandler } from "next";
 import Stripe from "stripe";
+import { email, personalEmail, phoneNumber } from "@/common-data";
+import getId from "@/components/getid";
 import gqlclient from "@/gql/client";
-import { getProductById } from "@/gql/queries";
+import { getDiscount, getProductById } from "@/gql/queries";
+import { UserType } from "@/provider/app-context";
+import { writeValue } from "@/utils/database";
 
 const stripe = new Stripe((process.env?.STRIPE_SECRET_KEY as string) ?? "", { apiVersion: "2022-11-15" });
+
+function getMailText({
+  discount,
+  totalPrice,
+  invoiceRows,
+  customerDetails
+}: {
+  discount?: { promo: string; percentage: number } | undefined;
+  totalPrice: number;
+  invoiceRows: string[];
+  customerDetails: UserType;
+}) {
+  let mailText = `
+Thank you for your order. Your order details are given below :
+
+`;
+  mailText += invoiceRows.join("");
+  if (discount) {
+    mailText += `Congratulations You Have Successfully applied the ${discount?.promo} Promo\n`;
+    mailText += `Total Cost without discount = ₹${totalPrice}\n`;
+    mailText += `Total Cost = ₹${+totalPrice - (+totalPrice * discount.percentage) / 100}\n\n\nCustomer Details : \n`;
+  } else {
+    mailText += `Total Cost = ₹${totalPrice}\n\n\nCustomer Details : \n`;
+  }
+  mailText += `Name : ${customerDetails?.name}
+Phone Number : ${customerDetails?.phoneNumber}
+Email : ${customerDetails?.email}
+Address : ${customerDetails?.addressBuilding}, ${customerDetails?.addressStreet},
+${customerDetails?.addressCity}, ${customerDetails?.addressState}
+Pincode : ${customerDetails?.addressPincode}
+LandMark : ${customerDetails?.addressLandmark}
+For Any Further Queries Please Contact us at ${email} or ${phoneNumber}`;
+  return mailText;
+}
+
 const checkoutHandler: NextApiHandler = async (req, res) => {
   if (req.method === "POST" && req.body.data) {
     try {
@@ -16,23 +55,28 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
           noi: number;
         }[];
         promo: string | undefined;
-        custDetails: {
-          name: string;
-          phoneNumber: string;
-          building: string;
-          street: string;
-          landmark: string;
-          city: string;
-          state: string;
-          pincode: string;
-        };
+        customerDetails: UserType;
       } = JSON.parse(decryptedString);
+      const subject = `Congratulations ! Your Order from Radiant is Placed Successfully.`;
       const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
       const discounts: Stripe.Checkout.SessionCreateParams.Discount[] = [];
       if (realData?.promo) {
         discounts.push({
           coupon: realData?.promo
         });
+      }
+      let dis: any;
+      if (realData.promo) {
+        dis = await gqlclient.request(getDiscount, {
+          code: realData.promo
+        });
+      }
+
+      let disPer = 0;
+      try {
+        disPer = +dis?.promoCollection?.items[0]?.discountPercentage;
+      } catch {
+        //catch
       }
       for (let i = 0; i < realData.cart.length; i++) {
         const gqlData: Record<"products", any> = await gqlclient.request(getProductById, {
@@ -43,6 +87,7 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
         if (product?.salePercent) {
           price = price * ((100 - product?.salePercent) / 100);
         }
+
         if (product) {
           lineItems.push({
             price_data: {
@@ -57,14 +102,44 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
           });
         }
       }
+      const invoiceRows: string[] = [];
+      let totalPrice = 0;
+      lineItems.forEach((item, index) => {
+        const name = item.price_data?.product_data?.name;
+        const quant = item.quantity ?? 0;
+        const unitamt = (item.price_data?.unit_amount ?? 0) / 100;
+        invoiceRows.push(`${index + 1}. ${name} - ₹${unitamt} * ${quant} = ₹${unitamt * quant}\n`);
+        totalPrice += unitamt * quant;
+      });
+      const uid = getId();
       const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
         mode: "payment",
-        success_url: `${req.headers.origin}/?success=true`,
+        success_url: `${req.headers.origin}/?order=success&uid=${uid}`,
         cancel_url: `${req.headers.origin}/?canceled=true`,
         discounts: discounts
       });
-      // res.redirect(303, session?.url ?? "/");
+      const discount =
+        realData?.promo && disPer
+          ? {
+              promo: realData.promo,
+              percentage: disPer
+            }
+          : undefined;
+      writeValue(uid, {
+        mailOptions: {
+          from: process.env.USER_MAIL,
+          to: [email, realData?.customerDetails?.email, personalEmail],
+          subject: subject,
+          text: getMailText({
+            discount: discount,
+            totalPrice: totalPrice,
+            invoiceRows: invoiceRows,
+            customerDetails: realData?.customerDetails
+          })
+        }
+      });
+
       res.status(200).json({ url: session?.url });
     } catch (e: any) {
       res.status(500).json({ message: "something went wrong" });

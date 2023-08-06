@@ -4,6 +4,7 @@ import axios from "axios";
 import { useGetCart } from "@/hooks/use-cart";
 import { useGetUser } from "@/hooks/use-user";
 import { promocode } from "../cart/prices";
+import { UserType } from "@/provider/app-context";
 
 export default function Checkoutform() {
   const user = useGetUser();
@@ -21,27 +22,19 @@ export default function Checkoutform() {
       Object.keys(cart).forEach(function forEachInner(id) {
         cartArr.push({ id: id, noi: cart[id]?.numberOfItems ?? 0 });
       });
-      const custDeets: {
-        name: string;
-        phoneNumber: string;
-        building: string;
-        street: string;
-        landmark: string;
-        city: string;
-        state: string;
-        pincode: string;
-      } = {
+      const custDeets: Omit<UserType, "image"> = {
         name: target[0]?.value ?? "user",
         phoneNumber: target[1]?.value ?? "",
-        building: target[3]?.value ?? "",
-        street: target[2]?.value ?? "",
-        landmark: target[4]?.value ?? "",
-        city: target[5]?.value ?? "",
-        state: target[6]?.value ?? "",
-        pincode: target[7]?.value ?? ""
+        email: target[2]?.value ?? "",
+        addressBuilding: target[4]?.value ?? "",
+        addressStreet: target[3]?.value ?? "",
+        addressLandmark: target[5]?.value ?? "",
+        addressCity: target[6]?.value ?? "",
+        addressState: target[7]?.value ?? "",
+        addressPincode: +(target[8]?.value ?? "")
       };
       const finalCartString = Buffer.from(
-        JSON.stringify({ cart: cartArr, promo: promocode, custDetails: custDeets })
+        JSON.stringify({ cart: cartArr, promo: promocode, customerDetails: custDeets })
       ).toString("base64");
       axios
         .post("/api/checkout", { data: finalCartString })
@@ -77,6 +70,7 @@ export default function Checkoutform() {
           required
           defaultValue={user?.phoneNumber.substring(2)}
         />
+        <input type="email" placeholder="Email" required defaultValue={user?.email} />
         <input type="text" placeholder="Street" required defaultValue={user?.addressStreet} />
         <input type="text" placeholder="Building" defaultValue={user?.addressBuilding} />
         <input type="text" placeholder="Landmark" defaultValue={user?.addressLandmark} />

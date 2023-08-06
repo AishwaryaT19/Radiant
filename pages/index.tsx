@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import type { GetStaticProps } from "next";
+import { useRouter } from "next/router";
+import axios from "axios";
 import gqlclient from "@/gql/client";
 import { getAboutData, getCategories, getTestimonials, getLandingPageData } from "@/gql/queries";
+import { useSetCart } from "@/hooks/use-cart";
 import Contact from "@/modules/home/contact";
 import Testimonials from "@/modules/home/testimonials";
 import type { AboutPropType, CategoryPropType, LandingPropType, TestimonialPropType } from "@/modules/home/types";
@@ -16,6 +19,20 @@ export interface HomeProps {
   landingPageData: LandingPropType;
 }
 export default function Home({ categories, testimonials, aboutData, landingPageData }: HomeProps) {
+  const { query } = useRouter();
+  const setCart = useSetCart();
+  useEffect(() => {
+    if (query?.order === "success" && query?.uid) {
+      axios
+        .get(`/api/send-email?uid=${query.uid}`)
+        .then(() => {
+          setCart({});
+        })
+        .catch(() => {
+          //
+        });
+    }
+  }, [query]);
   return (
     <section id="Home">
       <LandingBanner data={landingPageData} />
