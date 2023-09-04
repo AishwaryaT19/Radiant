@@ -7,6 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === "POST" && req.body.code) {
       const body = req.body;
       const code = Buffer.from(body.code, "base64").toString("utf-8");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const promo: any = await gqlclient.request(getDiscount, {
         code: code
       });

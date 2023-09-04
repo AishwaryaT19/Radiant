@@ -24,7 +24,9 @@ export default function Home({ categories, testimonials, aboutData, landingPageD
   useEffect(() => {
     if (query?.order === "success" && query?.uid) {
       axios
-        .get(`/api/send-email?uid=${query.uid}`)
+        .post(`/api/send-email?uid=${query.uid}`, {
+          uid: query.uid
+        })
         .then(() => {
           setCart({});
         })
@@ -32,7 +34,16 @@ export default function Home({ categories, testimonials, aboutData, landingPageD
           //
         });
     }
-  }, [query]);
+    if (query?.canceled && query?.uid) {
+      axios
+        .post(`/api/clear-entry?uid=${query.uid}`, {
+          uid: query.uid
+        })
+        .catch(() => {
+          //
+        });
+    }
+  }, [query, setCart]);
   return (
     <section id="Home">
       <LandingBanner data={landingPageData} />
@@ -45,12 +56,16 @@ export default function Home({ categories, testimonials, aboutData, landingPageD
 }
 
 export const getStaticProps: GetStaticProps = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const categoryCollection: any = (await gqlclient.request(getCategories)) ?? {};
   const categories = categoryCollection.categoriesCollection?.items ?? [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const testimonialCollection: any = (await gqlclient.request(getTestimonials)) ?? {};
   const testimonials = testimonialCollection?.testimonialsCollection?.items ?? [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const aboutCollection: any = (await gqlclient.request(getAboutData)) ?? [];
   const aboutData = aboutCollection?.aboutCollection?.items ?? [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const landingPageDataCollection: any = (await gqlclient.request(getLandingPageData)) ?? {};
   const landingPageData = landingPageDataCollection?.landingPageCollection?.items ?? [];
   const forReturn: HomeProps = {

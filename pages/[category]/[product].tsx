@@ -14,16 +14,16 @@ export default function Product({ data }: { data: ProductProp }) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const ProductNamesArr: any = (
-    (await gqlclient.request(getProductNamesAndCategories)) as any
-  )?.productsCollection?.items?.map?.((elem: any) => {
-    return {
-      params: {
-        product: elem?.name?.replaceAll(" ", "-").toLowerCase(),
-        category: elem?.category?.title.replaceAll(" ", "-").toLowerCase()
-      }
-    };
-  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ProductNamesArr: any = // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((await gqlclient.request(getProductNamesAndCategories)) as any)?.productsCollection?.items?.map?.((elem: any) => {
+      return {
+        params: {
+          product: elem?.name?.replaceAll(" ", "-").toLowerCase(),
+          category: elem?.category?.title.replaceAll(" ", "-").toLowerCase()
+        }
+      };
+    });
   return {
     paths: ProductNamesArr,
     fallback: false
@@ -33,6 +33,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;
   const pro = params?.product;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const products: any =
     (await gqlclient.request(getSingleProduct, {
       productName: String(pro).replaceAll("-", " ")

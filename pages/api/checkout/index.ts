@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
 import type { NextApiHandler } from "next";
 import Stripe from "stripe";
+import mongoClient from "@/clients/mongo-client";
 import { email, personalEmail, phoneNumber } from "@/common-data";
 import getId from "@/components/getid";
 import gqlclient from "@/gql/client";
 import { getDiscount, getProductById } from "@/gql/queries";
 import { UserType } from "@/provider/app-context";
-import { writeValue } from "@/utils/database";
 
 const stripe = new Stripe((process.env?.STRIPE_SECRET_KEY as string) ?? "", { apiVersion: "2022-11-15" });
 
@@ -57,7 +57,6 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
         promo: string | undefined;
         customerDetails: UserType;
       } = JSON.parse(decryptedString);
-      const subject = `Congratulations ! Your Order from Radiant is Placed Successfully.`;
       const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
       const discounts: Stripe.Checkout.SessionCreateParams.Discount[] = [];
       if (realData?.promo) {
@@ -65,6 +64,7 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
           coupon: realData?.promo
         });
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let dis: any;
       if (realData.promo) {
         dis = await gqlclient.request(getDiscount, {
@@ -79,6 +79,7 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
         //catch
       }
       for (let i = 0; i < realData.cart.length; i++) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const gqlData: Record<"products", any> = await gqlclient.request(getProductById, {
           id: realData.cart[i]?.id
         });
@@ -116,7 +117,7 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
         line_items: lineItems,
         mode: "payment",
         success_url: `${req.headers.origin}/?order=success&uid=${uid}`,
-        cancel_url: `${req.headers.origin}/?canceled=true`,
+        cancel_url: `${req.headers.origin}/?canceled=true&uid=${uid}`,
         discounts: discounts
       });
       const discount =
@@ -126,22 +127,28 @@ const checkoutHandler: NextApiHandler = async (req, res) => {
               percentage: disPer
             }
           : undefined;
-      writeValue(uid, {
-        mailOptions: {
-          from: process.env.USER_MAIL,
-          to: [email, realData?.customerDetails?.email, personalEmail],
-          subject: subject,
-          text: getMailText({
+      const monoIns = await mongoClient.connect();
+      const mailTo = [email, personalEmail];
+      if (realData?.customerDetails?.email) {
+        mailTo.push(realData?.customerDetails?.email);
+      }
+      monoIns
+        .db("radiant")
+        .collection("orders")
+        .insertOne({
+          id: uid,
+          mailTo: mailTo,
+          mailText: getMailText({
             discount: discount,
             totalPrice: totalPrice,
             invoiceRows: invoiceRows,
             customerDetails: realData?.customerDetails
           })
-        }
-      });
+        })
+        .then(() => monoIns.close());
 
       res.status(200).json({ url: session?.url });
-    } catch (e: any) {
+    } catch {
       res.status(500).json({ message: "something went wrong" });
     }
   } else {
