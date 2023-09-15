@@ -19,29 +19,16 @@ export default function Index(products: ProductProps) {
   );
 }
 
-// export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-//   const categories: any =
-//     (await gqlclient.request(getProductByCategories, {
-//       collectionType: String(query.category).replaceAll("-", " "),
-//     })) ?? {};
-//   const product = categories?.productsCollection?.items ?? [];
-//   const forReturn: ProductProps = { products: product };
-//   const products = forReturn.products;
-//   return {
-//     props: { products },
-//     revalidate: 43200,
-//   };
-// };
 export const getStaticPaths: GetStaticPaths = async () => {
-  const categoryNamesArr: any = (
-    (await gqlclient.request(getCategoryNames)) as any
-  )?.categoriesCollection?.items?.map?.((elem: any) => {
-    return {
-      params: {
-        category: elem?.title?.replaceAll(" ", "-").toLowerCase()
-      }
-    };
-  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const categoryNamesArr: any = // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((await gqlclient.request(getCategoryNames)) as any)?.categoriesCollection?.items?.map?.((elem: any) => {
+      return {
+        params: {
+          category: elem?.title?.replaceAll(" ", "-").toLowerCase()
+        }
+      };
+    });
   return {
     paths: categoryNamesArr,
     fallback: false
@@ -51,6 +38,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context;
   const cat = params?.category;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const categories: any =
     (await gqlclient.request(getProductByCategories, {
       collectionType: String(cat).replaceAll("-", " ")

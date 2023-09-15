@@ -35,7 +35,7 @@
     @include flexType(row, space-between, center);
     font-size: 1.25rem;
   }
-  & > a {
+  & > .check {
     text-decoration: none;
     color: white;
     display: block;
@@ -52,5 +52,8 @@
       color: black;
       border: 1px solid black;
     }
+  }
+  @media only screen and (max-width: 900px) {
+    width: 97.5%;
   }
 }

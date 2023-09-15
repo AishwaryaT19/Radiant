@@ -1,5 +1,6 @@
-import React, { ReactNode, useState, Dispatch, SetStateAction, createContext } from "react";
+import React, { ReactNode, useState, useEffect, Dispatch, SetStateAction, createContext, RefObject } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
 
 export interface CartType {
   name: string;
@@ -10,17 +11,16 @@ export interface CartType {
 export interface UserType {
   name: string;
   email: string;
-  imageUrl: string;
-  phoneNumber: number;
-  address: {
-    buildingDetails: string;
-    street: string;
-    landmark: string;
-    pincode: number;
-    city: string;
-    state: string;
-  };
+  image: string;
+  phoneNumber: string;
+  addressBuilding: string;
+  addressCity: string;
+  addressLandmark: string;
+  addressPincode: number;
+  addressState: string;
+  addressStreet: string;
 }
+
 export interface AppContextType {
   cart: {
     state: Record<string, CartType>;
@@ -30,6 +30,10 @@ export interface AppContextType {
     state: UserType | undefined;
     setState: Dispatch<SetStateAction<UserType | undefined>>;
   };
+  loginModalRef: {
+    state: RefObject<HTMLDialogElement>;
+    setState: Dispatch<SetStateAction<RefObject<HTMLDialogElement>>>;
+  };
 }
 const appContextInit: AppContextType = {
   cart: {
@@ -38,6 +42,10 @@ const appContextInit: AppContextType = {
   },
   user: {
     state: undefined,
+    setState: () => undefined
+  },
+  loginModalRef: {
+    state: undefined as unknown as RefObject<HTMLDialogElement>,
     setState: () => undefined
   }
 };
@@ -50,7 +58,38 @@ interface ProviderProps {
 export default function AC(props: ProviderProps) {
   const [cart, setCart] = useState<Record<string, CartType>>(appContextInit.cart.state);
   const [user, setUser] = useState<UserType | undefined>(appContextInit.user.state);
-
+  const [loginModalRef, setLoginModalRef] = useState<RefObject<HTMLDialogElement>>(appContextInit.loginModalRef.state);
+  useEffect(() => {
+    const cookies = parseCookies();
+    const cookieUserStr = cookies?.user;
+    if (cookieUserStr) {
+      const cookieUserObj = JSON.parse(Buffer.from(cookieUserStr, "base64").toString("utf-8"));
+      if (cookieUserObj?.name) {
+        setUser(cookieUserObj);
+        if (cookies?.cart) {
+          const cookiesCartObj = JSON.parse(Buffer.from(cookies.cart, "base64").toString("utf-8"));
+          setCart(cookiesCartObj);
+        }
+      }
+    } else {
+      destroyCookie(null, "user");
+    }
+  }, []);
+  useEffect(() => {
+    if (user) {
+      setCookie(null, "user", Buffer.from(JSON.stringify(user)).toString("base64"), {
+        maxAge: 6 * 60 * 60,
+        path: "/"
+      });
+    }
+  }, [user]);
+  useEffect(() => {
+    if (Object.keys(cart).length > 0) {
+      setCookie(null, "cart", Buffer.from(JSON.stringify(cart)).toString("base64"), {
+        maxAge: 6 * 60 * 60
+      });
+    }
+  }, [cart]);
   const contextProviderValue: AppContextType = {
     cart: {
       state: cart,
@@ -59,6 +98,10 @@ export default function AC(props: ProviderProps) {
     user: {
       state: user,
       setState: setUser
+    },
+    loginModalRef: {
+      state: loginModalRef,
+      setState: setLoginModalRef
     }
   };
 

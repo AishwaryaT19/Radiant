@@ -21,28 +21,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               "en-US": body.email
             },
             image: {
-              "en-US": body.imageUrl
+              "en-US": body.image
             },
             phoneNumber: { "en-US": body.phoneNumber },
             password: {
               "en-US": body.password
             },
             addressBuilding: {
-              "en-US": body.address.buildingDetails
+              "en-US": body.addressBuilding
             },
             addressCity: {
-              "en-US": body.address.city
+              "en-US": body.addressCity
             },
             addressLandmark: {
-              "en-US": body.address.landmark
+              "en-US": body.addressLandmark
             },
             addressStreet: {
-              "en-US": body.address.street
+              "en-US": body.addressStreet
             },
             addressState: {
-              "en-US": body.address.state
+              "en-US": body.addressState
             },
-            addressPincode: { "en-US": body.address.pincode }
+            addressPincode: { "en-US": body.addressPincode }
           }
         });
         if (entry) {

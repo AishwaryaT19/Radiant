@@ -64,7 +64,7 @@ export default function Contact() {
     }
   };
   return (
-    <div className="contact">
+    <div className="contact" id="contact">
       <div className="img-container">
         <Image src="/assets/images/cherryblossom.png" fill sizes="100%" alt="" />
       </div>

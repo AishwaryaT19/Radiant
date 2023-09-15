@@ -16,7 +16,7 @@ const mapper = (elem: any, index: number) => {
   );
 };
 
-export default function Listings({ products }: ProductProps) {
+export default function Listings({ products = [] }: ProductProps) {
   return <div className="listing">{products.map(mapper)}</div>;
 }
 

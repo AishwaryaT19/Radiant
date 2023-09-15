@@ -1,25 +1,23 @@
 import React from "react";
 import Image from "next/image";
 import { testimonailPageHeading } from "./text";
-import type { TestimonialType } from "./types";
+import type { TestimonialArrayType, TestimonialProps, TestimonialType } from "./types";
 
-const mapper = (elem: TestimonialType, index: number) => {
-  return <TestimonialCard key={index} name={elem.name} imgUrl={elem.imgUrl} testimonial={elem.testimonial} />;
-};
-export default function Testimonials() {
+const mapper = (elem: TestimonialArrayType, index: number) => {
   return (
-    <div className="testimonials">
+    <TestimonialCard
+      key={index}
+      name={elem.user}
+      imgUrl={elem.profilePicture?.url ?? "/logo.png"}
+      testimonial={elem.feedback}
+    />
+  );
+};
+export default function Testimonials({ data }: TestimonialProps) {
+  return (
+    <div className="testimonials" id="testimonials">
       <h2>{testimonailPageHeading}</h2>
-      <div className="cards-container">
-        {Array(4)
-          .fill({
-            name: `Handmade Soaps`,
-            imgUrl: `/logo.png`,
-            testimonial: `lorem ipsum ilaih ihilahfkl jkhk nhkhk nhhn nhn hnh nn njnm lorem ipsum ilaih ihilahfkl jkhk\
-nhkhk nhhn nhn hnh nn njnm lorem ipsum ilaih ihilahfkl jkhk nhkhk nhhn nhn hnh nn njnm`
-          })
-          .map(mapper)}
-      </div>
+      <div className="cards-container">{data.map(mapper)}</div>
     </div>
   );
 }

@@ -5,7 +5,8 @@
   padding: 0 8%;
   background-color: black;
   color: white;
-  .searches {
+  z-index: 99;
+  .main-logo {
     width: max(30%, 350px);
     @include flexType(row, none, center);
     a {
@@ -14,45 +15,6 @@
       color: white;
       font-size: 1.7rem;
       font-family: var(--header-font);
-    }
-    .search {
-      background-color: white;
-      @include flexType(row, none, center);
-      width: 30px;
-      height: 30px;
-      border: 1px solid black;
-      padding: 0;
-      border-radius: 20px;
-      transition: all 0.3s ease;
-      * {
-        transition: all 0.3s ease;
-      }
-      &:hover {
-        width: calc(100% - 150px);
-        input {
-          width: calc(100% - 140px);
-          opacity: 1;
-        }
-      }
-      &:has(input:focus) {
-        outline: 1px solid black;
-        width: calc(100% - 140px);
-        input {
-          width: calc(100% - 130px);
-          opacity: 1;
-        }
-      }
-      svg {
-        aspect-ratio: 1;
-        width: 30px;
-        color: black;
-      }
-      input {
-        opacity: 0;
-        width: 0%;
-        border: none;
-        outline: none;
-      }
     }
   }
   .navigation {
@@ -72,6 +34,11 @@
       height: 100%;
       font-size: 1.7rem;
       @include flexType(row, center, center);
+      .img-container {
+        width: 1.7rem;
+        aspect-ratio: 1;
+        border-radius: 50%;
+      }
     }
     .cart {
       position: relative;
@@ -105,26 +72,11 @@
   }
   @media only screen and (max-width: 900px) {
     padding: 0 5%;
-    .searches {
+    .main-logo {
       @include flexType(row, none, center);
       a {
         font-size: 1.2rem;
         width: 80px;
-      }
-      .search {
-        width: 25px;
-        height: 25px;
-        font-size: 0.8rem;
-        &:hover {
-          width: calc(100% - 80px);
-          input {
-            width: calc(100% - 70px);
-            opacity: 1;
-          }
-        }
-        &:has(input:focus) {
-          width: calc(100% - 70px);
-        }
       }
     }
     .navigation {
